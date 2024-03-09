@@ -34,7 +34,7 @@ router.get("/sentiment", async (req, res) => {
         examples: [...fakedata.slice(0,100), ...realdata.slice(0,100)],
         inputs: [
             "Campaign will be focused on getting more busses to campus",
-            "Iwill provide 100000$ dollars to everyone",
+            "I will provide 100000$ dollars to everyone",
         ],
     })
 
@@ -43,25 +43,18 @@ router.get("/sentiment", async (req, res) => {
 
   });
 
-router.get("/toxicity", async (req, res) => {
+router.get("/traits", async (req, res) => {
     const classify = await cohere.classify({
         examples: [
-            { text: 'you are hot trash', label: 'Toxic' },
-            { text: 'go to hell', label: 'Toxic' },
-            { text: 'get rekt moron', label: 'Toxic' },
-            { text: 'get a brain and use it', label: 'Toxic' },
-            { text: 'say what you mean, you jerk.', label: 'Toxic' },
-            { text: 'Are you really this stupid', label: 'Toxic' },
-            { text: 'I will honestly kill you', label: 'Toxic' },
-            { text: 'yo how are you', label: 'Benign' },
-            { text: "I'm curious, how did that happen", label: 'Benign' },
-            { text: 'Try that again', label: 'Benign' },
-            { text: 'Hello everyone, excited to be here', label: 'Benign' },
-            { text: 'I think I saw it first', label: 'Benign' },
-            { text: 'That is an interesting point', label: 'Benign' },
-            { text: 'I love this', label: 'Benign' },
-            { text: 'We should try that sometime', label: 'Benign' },
-            { text: 'You should go for it', label: 'Benign' },
+            { text: 'The President signed the bipartisan bill into law today, marking a significant step forward in addressing the nation\'s infrastructure challenges.', label: 'Neutral' },
+            { text: 'The Prime Minister\'s bold economic reforms have led to a surge in job creation and economic growth, bringing prosperity to the nation.', label: 'Positive' },
+            { text: 'Opposition leaders criticized the government\'s handling of the crisis, accusing officials of incompetence and failure to prioritize the needs of the people.', label: 'Negative' },
+            { text: 'The government announced plans to increase funding for education, aiming to improve access to quality education for all citizens.', label: 'Neutral' },
+            { text: 'The mayor unveiled a new initiative to address traffic congestion in the city, seeking input from local residents and experts.', label: 'Neutral' },
+            { text: 'The President\'s healthcare reform legislation passed with overwhelming bipartisan support, hailed as a historic achievement in improving access to healthcare for millions.', label: 'Positve' },
+            { text: 'The Prime Minister\'s diplomatic efforts resulted in a landmark peace agreement between long-standing adversaries, fostering hope for lasting stability in the region.', label: 'Positive' },
+            { text: 'Critics slammed the opposition party\'s proposed tax policy, arguing that it would burden working-class families and hinder economic growth.', label: 'Negative' },
+            { text: "The government's decision to cut funding for social welfare programs sparked outrage among advocacy groups, who warned of dire consequences for vulnerable populations.", label: 'Negative' },
           ],
           inputs: [
             'this game sucks, you suck',
