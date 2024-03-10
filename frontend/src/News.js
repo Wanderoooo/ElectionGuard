@@ -24,7 +24,7 @@ function News() {
     const navigate = useNavigate();
     function mm(e) {
         console.log("hello");
-        navigate("/app");
+        navigate("/");
     }
     function analyze(e) {
         setStatus("normal");

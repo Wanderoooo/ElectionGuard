@@ -1,16 +1,31 @@
 import React from 'react';
 import './index.css';
-import { Image, Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Button, Image, Breadcrumb, Layout, Menu, theme } from 'antd';
 import logo from './2.png';
 import bgPic from './Newspapers_Getty.jpg'
+import { useNavigate } from "react-router-dom";
+
+
+
 const {  Header, Content, Footer } = Layout;
+
 
 const items = new Array(1).fill(null).map((_, index) => ({
   key: String(index + 1),
   label: `ELECTION GUARD`,
 }));
 
+
+
 function App() {
+
+  const navigate = useNavigate();
+    function mm(e) {
+        console.log("hello");
+        navigate("/app");
+    }
+
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -46,8 +61,10 @@ function App() {
             borderRadius: borderRadiusLG,
           }}
         >
-          <img src={bgPic} width={colorBgContainer - 10} height={400 }/>
           
+          <img className='bgImg' src={bgPic} width={colorBgContainer - 10} height={400 }/>
+
+          <Button onClick={mm} type="primary">Fake news?</Button>
   
         </div>
         
