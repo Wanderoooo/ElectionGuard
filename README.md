@@ -1,7 +1,7 @@
 # ElectionGuard
 
 ## Description
-ElectionGuard provides a tool for users to check a body of text to determine whether it is fake news. Statistics provided are measures of negativity, level of polarizing, bias, and criticality. Additionally, we check the political stance of the input text, and provide a detailed summary of political stance ofo specific points in the article.
+ElectionGuard provides a tool for users to check a body of text to determine whether it is fake news. Statistics provided are measures of negativity, level of polarizing, bias, and criticality. Additionally, we check the political stance of the input text, and provide a detailed summary of political stance of specific points in the article.
 
 ## Data Source
 We used the following datasets for this project:
