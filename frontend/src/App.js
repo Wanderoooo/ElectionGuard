@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import './App.css'
+const { Header, Content, Footer } = Layout;
 
-function App() {
+const items = new Array(1).fill(null).map((_, index) => ({
+  key: index + 1,
+  label: `nav ${index + 1}`,
+}));
+
+function App()  {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-hello
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Layout>
+      <Header style={{ display: 'flex', alignItems: 'left' }}>
+        
+        <Menu
+          theme="dark"
+          mode="horizontal"          
+          style={{ flex: 1}}
+        />
+        
+        <image src="./2.png"/>
+        <h1 className='headerName'>ELECTION GUARD</h1>
+        
+        
+        
+      </Header>
+      <Content style={{ padding: '0 48px' }}>
+        <div
+          style={{
+            background: colorBgContainer,
+            minHeight: 280,
+            padding: 24,
+            borderRadius: borderRadiusLG,
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+        </div>
+
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>
+      </Footer>
+    </Layout>
   );
-}
+};
 
 export default App;
