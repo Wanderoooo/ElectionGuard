@@ -130,7 +130,7 @@ router.post("/sentiment", async (req, res) => {
         ],
     })
   
-    console.log(classify); 
+    console.log(classify);
     const output = {percentage: classify.classifications[0].labels.fake.confidence,
       label: "negative"}
     
