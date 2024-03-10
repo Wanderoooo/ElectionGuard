@@ -115,8 +115,21 @@ router.post("/traits", async (req, res) => {
   console.log("toneFake", toneFake);
   rArray.push(toneFake.classifications[0].labels.fake.confidence)
   
-  const summary = await summarizeText(input);
-  rArray.push(summary.summary);
+  let summary = {};
+  try {
+    summary = await summarizeText(input);
+  } catch {
+    summary.summary = "Article too short to summarize";
+    // silent fail if input < 250 characters
+  }
+
+  let actualSummary = summary.summary;
+  if (req.body.language !== 'en' && actualSummary !== "Article too short to summarize") {
+    const summaryText = await translator.translateText(actualSummary, null, req.body.language);
+    actualSummary = summaryText.text;
+  }
+  console.log("actual summary", actualSummary)
+  rArray.push(actualSummary);
 
   console.log("rArray", rArray)
 
