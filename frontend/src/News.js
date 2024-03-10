@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Layout, Menu, theme, Button, Progress, Flex, Typography, ConfigProvider } from 'antd';
-import { Input, Select, Space, Tooltip } from 'antd';
+import { Input, Select, Space, Tooltip, Tabs } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
@@ -36,6 +36,8 @@ function News() {
     const [c, setc] = useState("CRITICALITY");
     const [lr, setlr] = useState("LEFT/RIGHT LEANING");
 
+    const [tab, setTab] = useState([[["left"], ["content"]], [["center"], ["content"]], [["right"], ["content"]]]);
+
     const [loadings, setLoadings] = useState([]);
 
     const [state, setState] = useState(0);
@@ -43,7 +45,7 @@ function News() {
 
     const handleChange = (value) => {
         setLang({ value })
-        if (value=="en") {
+        if (value == "en") {
             setAnalyzer("ANALYZE");
             setmm("Menu");
             sethf("ANALYSIS OF YOUR NEWS ARTICLE");
@@ -89,42 +91,43 @@ function News() {
     function analyze(e) {
 
         setStatus("normal");
-        const input = {"input": state.text, "language": lang.value} 
+        const input = { "input": state.text, "language": lang.value }
+        console.log(lang.value);
         setLoadings((prevLoadings) => {
             const newLoadings = [...prevLoadings];
             newLoadings[0] = true;
             return newLoadings;
-          });
+        });
 
         axios.post(`http://localhost:${SERVERHOST}/classify/traits`, input)
-        .then(response => {
-            setLoadings((prevLoadings) => {
-                const newLoadings = [...prevLoadings];
-                newLoadings[0] = false;
-                return newLoadings;
-              });
+            .then(response => {
+                setLoadings((prevLoadings) => {
+                    const newLoadings = [...prevLoadings];
+                    newLoadings[0] = false;
+                    return newLoadings;
+                });
 
-            console.log((response.data[0]));
-            setNegativity((response.data[0]*100).toFixed(2));
-            setPolarizing((response.data[1]*100).toFixed(2));
-            setBias((response.data[2]*100).toFixed(2));
-            setCriticality((response.data[3]* 100).toFixed(2));
-            setFake((response.data[4]* 100).toFixed(2));
-            setLeft((response.data[5]* 100).toFixed(2));
+                console.log((response.data[0]));
+                setNegativity((response.data[0] * 100).toFixed(2));
+                setPolarizing((response.data[1] * 100).toFixed(2));
+                setBias((response.data[2] * 100).toFixed(2));
+                setCriticality((response.data[3] * 100).toFixed(2));
+                setFake((response.data[4] * 100).toFixed(2));
+                setLeft((response.data[5] * 100).toFixed(2));
 
 
-          console.log('Success:', response.data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+                console.log('Success:', response.data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
-    
-    const data = [{name: 'Page A', uv: 400, pv: 2400, amt: 2400}];
+
+    const data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }];
 
     const renderLineChart = (
         <LineChart width={600} height={300} data={data}>
@@ -147,8 +150,13 @@ function News() {
             >
                 <div className="demo-logo" />
                 <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
+<<<<<<< HEAD
+                    onMouseOut={e => (e.currentTarget.src = logo)} onClick={mm} />
+                <Title style={{ color: 'white', onClick: { mm } }}>ELECTION GUARD</Title>
+=======
                     onMouseOut={e => (e.currentTarget.src = logo)} />
                 <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
+>>>>>>> 39e8a11cf04e35e438a32368fb3d331cc6ec6e98
 
                 <Menu onClick={mm} theme="dark"
                     mode="horizontal"
@@ -198,7 +206,7 @@ function News() {
                             />
                             <ConfigProvider contentFontSizeLG={20}>
                                 <Button style={{ padding: "0px 20px" }} size="large" type="primary" loading={loadings[0]}
-          onClick={analyze} >{analyzer}</Button>
+                                    onClick={analyze} >{analyzer}</Button>
                             </ConfigProvider>
                         </div>
 
@@ -293,7 +301,7 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Progress percent={left} showInfo={false} strokeColor="blue" trailColor="red"/>
+                                <Progress percent={left} showInfo={false} strokeColor="blue" trailColor="red" />
                                 <h3>{lr}</h3>
                             </Flex>
 
@@ -307,26 +315,39 @@ function News() {
                         alignItems: 'center',
                         color: 'black',
                     }}>
-                        <div style={{
-                            padding: '25px 25px',
-                            background: colorBgContainer,
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            color: 'black',
-                        }}>
-                            <h2>{hs}</h2>
-                        </div>
+                        <Flex vertical={true}>
+                            <div style={{
+                                padding: '25px 25px',
+                                background: colorBgContainer,
+                                textAlign: 'center',
+                                alignItems: 'center',
+                                color: 'black',
+                            }}>
+                                <h2>{hs}</h2>
+                            </div>
 
-                        <div style={{
-                            padding: '25px 25px',
-                            background: colorBgContainer,
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            color: 'black',
-                        }}>
-                            {/* <h3>SUMMARY OF YOUR ARTICLE</h3> */}
-                        </div>
-                        {renderLineChart}
+                            <div style={{
+                                padding: '25px 25px',
+                                background: colorBgContainer,
+                                textAlign: 'center',
+                                alignItems: 'center',
+                                color: 'black',
+                            }}>
+                                <Tabs
+                                centered
+                                    type="card"
+                                    items={new Array(3).fill(null).map((_, i) => {
+                                        const id = String(i);
+                                        return {
+                                            label: tab[id][0],
+                                            key: id,
+                                            children: tab[id],
+                                        };
+                                    })}
+                                />
+                            </div>
+                        </Flex>
+
                     </Content>
                 </Layout>
             </Content>
