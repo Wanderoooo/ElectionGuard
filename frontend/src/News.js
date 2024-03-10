@@ -71,6 +71,10 @@ function News() {
             setb("BIAS");
             setc("CRITICALITY");
             setlr("LEFT/RIGHT LEANING");
+
+            tab[0][0] = "LEFT";
+            tab[1][0] = "CENTER";
+            tab[2][0] = "RIGHT";
         } else if (value == "fr") {
             setAnalyzer("ANALYSER");
             setmm("Menu");
@@ -83,6 +87,10 @@ function News() {
             setb("BIAS");
             setc("CRITICITÉ");
             setlr("TENDANCE GAUCHE/DROITE");
+
+            tab[0][0] = "GAUCHE";
+            tab[1][0] = "CENTRE";
+            tab[2][0] = "DROITE";
         } else {
             setAnalyzer("ANALICE");
             setmm("Menú");
@@ -95,6 +103,10 @@ function News() {
             setb("BIAS");
             setc("CRÍTICA");
             setlr("INCLINACIÓN IZQUIERDA/DERECHA");
+
+            tab[0][0] = "IZQUIERDA";
+            tab[1][0] = "CENTRO";
+            tab[2][0] = "DERECHA";
         }
     };
 
