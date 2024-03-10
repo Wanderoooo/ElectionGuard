@@ -105,5 +105,22 @@ router.get("/traits", async (req, res) => {
 });
 
 
+router.post("/sentiment", async (req, res) => {
+    let input = req.body.input;
+    const classify = await cohere.classify({
+        examples: [...fakedata.slice(0,100), ...realdata.slice(0,100)],
+        inputs: [
+            input
+        ],
+    })
+  
+    console.log(classify); 
+    const output = {percentage: classify.classifications[0].labels.fake.confidence,
+      label: "negative"}
+    
+    res.send(output);
+
+  });
+
 
 module.exports = router;
