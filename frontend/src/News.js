@@ -86,14 +86,15 @@ function News() {
         navigate("/");
     }
     function analyze(e) {
+
+        setStatus("normal");
+        const input = {"input": state.text, "language": lang.value} 
         setLoadings((prevLoadings) => {
             const newLoadings = [...prevLoadings];
             newLoadings[0] = true;
             return newLoadings;
           });
 
-        setStatus("normal");
-        const input = {"input": state.text, "language": lang.value} 
         axios.post(`http://localhost:${SERVERHOST}/classify/traits`, input)
         .then(response => {
             setLoadings((prevLoadings) => {
@@ -101,7 +102,7 @@ function News() {
                 newLoadings[0] = false;
                 return newLoadings;
               });
-              
+
             console.log((response.data[0]));
             setNegativity((response.data[0]*100).toFixed(2));
             setPolarizing((response.data[1]*100).toFixed(2));
