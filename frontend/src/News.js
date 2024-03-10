@@ -74,13 +74,8 @@ function News() {
             >
                 <div className="demo-logo" />
                 <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
-<<<<<<< HEAD
-                    onMouseOut={e => (e.currentTarget.src = logo)} />
-                <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
-=======
                 onMouseOut={e => (e.currentTarget.src = logo)} onClick={mm} />
                 <Title style={{ color: 'white', onClick:{mm}}}>ELECTION GUARD</Title>
->>>>>>> 7a1b862ac8277776f23ed04e0611dd8b8218b274
 
                 <Menu onClick={mm} theme="dark"
                     mode="horizontal"
