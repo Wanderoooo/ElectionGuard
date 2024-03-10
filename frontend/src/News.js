@@ -40,7 +40,7 @@ function News() {
     function analyze(e) {
         setStatus("normal");
         console.log(state);
-        const input = {"input": state.text} 
+        const input = {"input": state.text, "language": "en"} 
         axios.post(`http://localhost:${SERVERHOST}/classify/traits`, input)
         .then(response => {
         
