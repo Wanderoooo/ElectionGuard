@@ -44,6 +44,7 @@ router.get("/sentiment", async (req, res) => {
   });
 
 router.get("/traits", async (req, res) => {
+    let rArray = [];
     const tonePositive = await cohere.classify({
         examples: [
             { text: 'The President signed the bipartisan bill into law today, marking a significant step forward in addressing the nation\'s infrastructure challenges.', label: 'Neutral' },
@@ -55,12 +56,14 @@ router.get("/traits", async (req, res) => {
             { text: 'The Prime Minister\'s diplomatic efforts resulted in a landmark peace agreement between long-standing adversaries, fostering hope for lasting stability in the region.', label: 'Positive' },
             { text: 'Critics slammed the opposition party\'s proposed tax policy, arguing that it would burden working-class families and hinder economic growth.', label: 'Negative' },
             { text: "The government's decision to cut funding for social welfare programs sparked outrage among advocacy groups, who warned of dire consequences for vulnerable populations.", label: 'Negative' },
-            { text: 'A backlash ensued after Donald Trump launched a sexist rant against Kirsten Gillibrand Thursday morning, saying that the Democratic Senator  would do anything  for a campaign contribution.', label: 'Negative'}
+            { text: 'A backlash ensued after Donald Trump launched a sexist rant against Kirsten Gillibrand Thursday morning, saying that the Democratic Senator  would do anything  for a campaign contribution.', label: 'Negative'},
+            { text: 'donald trump is a great person', label: 'Positive'}
           ],
-          inputs: ["donald trump is horrible person"]
+          inputs: ["donald trump is a great person"]
       })
 
       console.log("tonePositive: ", tonePositive);
+      rArray = rArray.concat(tonePositive.classifications.map((obj) => ({ label: 'Negative', percentage: obj.labels.Negative.confidence })))
 
       const tonePolarizing = await cohere.classify({
         examples: [
@@ -75,6 +78,7 @@ router.get("/traits", async (req, res) => {
       })
     
       console.log("tonePolarizing: ", tonePolarizing);
+      rArray = rArray.concat(tonePolarizing.classifications.map((obj) => ({ label: 'Polarizing', percentage: obj.labels.Polarizing.confidence })))
 
       const toneBiased = await cohere.classify({
         examples: [
@@ -88,6 +92,7 @@ router.get("/traits", async (req, res) => {
   });
 
   console.log("toneBiased: ", toneBiased);
+  rArray = rArray.concat(toneBiased.classifications.map((obj) => ({ label: 'Biased', percentage: obj.labels.Biased.confidence })))
 
   const toneCritical = await cohere.classify({
     examples: [
@@ -101,7 +106,9 @@ router.get("/traits", async (req, res) => {
   });
 
   console.log("toneCritical", toneCritical);
-  res.send('yay')
+  rArray = rArray.concat(toneCritical.classifications.map((obj) => ({ label: 'Critical', percentage: obj.labels.Critical.confidence })))
+  console.log("rArray", rArray)
+  res.send(rArray)
 });
 
 
