@@ -4,7 +4,7 @@ import { Input } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
 import "./News.css";
-import axios from 'axios';
+//import axios from 'axios';
 
 const { Title, Te } = Typography;
 const SERVERHOST = 3001;
@@ -29,27 +29,24 @@ function News() {
         navigate("/");
     }
     function analyze(e) {
-<<<<<<< HEAD
         setStatus("normal");
         setNegativity(state.text);
         setPolarizing(state.text);
         setBias(state.text);
         setCriticality(state.text);
-=======
         // setNegativity(state.text);
         console.log(state);
         const input = {"input": state.text} 
-        axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input)
-        .then(response => {
+        // /*axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input) */
+        // .then(response => {
   
-          console.log('Success:', response.data);
-          let negativity = response.data.percentage * 100
-          setNegativity(negativity.toFixed(2));
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
->>>>>>> 38b22eedeb923971cb590b934889c9620addbb31
+        //   console.log('Success:', response.data);
+        //   let negativity = response.data.percentage * 100
+        //   setNegativity(negativity.toFixed(2));
+        // })
+        // .catch(error => {
+        //   console.error('Error:', error);
+        // });
     }
     const {
         token: { colorBgContainer, borderRadiusLG },

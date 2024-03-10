@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { Flex, Button, Image, Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Flex, Button, Image, Breadcrumb, Layout, Menu, theme, Typography } from 'antd';
 import { FlexProps, SegmentedProps } from 'antd';
 
 import logo from './2.png';
@@ -18,6 +18,7 @@ const boxStyle = {
 
 const {  Header, Content, Footer } = Layout;
 
+const { Title, Te } = Typography;
 
 const items = new Array(1).fill(null).map((_, index) => ({
   key: String(index + 1),
@@ -52,13 +53,10 @@ function App() {
         }}
       >
         <img src={logo} width={50}/>
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['2']}
-          items={items}
-          style={{ flex: 1, minWidth: 0 }}
-        />
+
+        <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
+
+        
       </Header>
       <Content style={{ padding: '0 48px' }}>
         
