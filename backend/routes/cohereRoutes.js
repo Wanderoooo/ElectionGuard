@@ -206,6 +206,7 @@ router.post("/traits", async (req, res) => {
   }
 
   console.log("summary", summary)
+  console.log("graaah", req.body.language);
 
   let actualSummary = summary.summary;
   if (req.body.language !== 'en' && actualSummary !== "Article too short to summarize") {
