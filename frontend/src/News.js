@@ -16,18 +16,26 @@ const items = new Array(1).fill(null).map((_, index) => ({
 }));
 
 function News() {
-    const [negativity, setNegativity] = useState(0);
-    const [polarizing, setPolarizing] = useState(10);
-    const [bias, setBias] = useState(20);
-    const [criticality, setCriticality] = useState(30);
+    const [negativity, setNegativity] = useState(-1);
+    const [polarizing, setPolarizing] = useState(-1);
+    const [bias, setBias] = useState(-1);
+    const [criticality, setCriticality] = useState(-1);
+    const [status, setStatus] = useState("exception");
 
     const [state, setState] = useState(0);
     const navigate = useNavigate();
     function mm(e) {
         console.log("hello");
-        navigate("/app");
+        navigate("/");
     }
     function analyze(e) {
+<<<<<<< HEAD
+        setStatus("normal");
+        setNegativity(state.text);
+        setPolarizing(state.text);
+        setBias(state.text);
+        setCriticality(state.text);
+=======
         // setNegativity(state.text);
         console.log(state);
         const input = {"input": state.text} 
@@ -41,6 +49,7 @@ function News() {
         .catch(error => {
           console.error('Error:', error);
         });
+>>>>>>> 38b22eedeb923971cb590b934889c9620addbb31
     }
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -128,7 +137,7 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Progress type="circle" percent={negativity} strokeColor="red" format={(percent) => `${percent}%`} success={ {percent: 0, strokeColor: "red"} } />
+                                <Progress type="circle" percent={negativity} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status} />
                                 <h1>NEGATIVITY</h1>
                             </Flex>
 
@@ -139,7 +148,7 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Progress type="circle" percent={polarizing} strokeColor="red" format={(percent) => `${percent}%`} success={ {percent: 0, strokeColor: "red"}}/>
+                                <Progress type="circle" percent={polarizing} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status}/>
                                 <h1>POLARIZING</h1>
                             </Flex>
                         </div>
@@ -152,7 +161,7 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Progress type="circle" percent={bias} strokeColor="red" format={(percent) => `${percent}%`} success={ {percent: 0, strokeColor: "red"}}/>
+                                <Progress type="circle" percent={bias} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status}/>
                                 <h1>BIAS</h1>
                             </Flex>
 
@@ -163,7 +172,7 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Progress type="circle" percent={criticality} strokeColor="red" format={(percent) => `${percent}%`} success={ {percent: 0, strokeColor: "red"}}/>
+                                <Progress type="circle" percent={criticality} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status}/>
                                 <h1>CRITICALITY</h1>
                             </Flex>
                         </div>

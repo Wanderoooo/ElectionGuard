@@ -31,6 +31,18 @@
 .headerName {
   color: white;
 }
+
+
+.bgImg {
+  position: relative;
+  top: 24;
+  width: 50%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
