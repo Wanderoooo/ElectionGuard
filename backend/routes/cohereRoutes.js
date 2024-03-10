@@ -115,28 +115,14 @@ router.post("/traits", async (req, res) => {
   console.log("toneFake", toneFake);
   rArray.push(toneFake.classifications[0].labels.fake.confidence)
   
-  const politicalSide = await cohere.classify({
+  const toneLeft = await cohere.classify({
     examples: [
-      {text: "Healthcare is a human right, not a privilege.", label: "left"},
-      {text: "Climate change is a pressing global crisis that requires immediate action.", label: "left"},
-      {text: "Income inequality is a significant issue that needs to be addressed through progressive taxation and social programs.", label: "left"},
-      {text: "Education should be accessible to all, regardless of socioeconomic background.", label: "left"},
-      {text: "Workers' rights, including fair wages and safe working conditions, must be protected and strengthened.", label: "left"},
-      {text: "Systemic racism and discrimination exist and must be actively dismantled.", label: "left"},
-      {text: "Gender equality and LGBTQ+ rights are fundamental human rights.", label: "left"},
-      {text: "Immigrants make valuable contributions to society and should be welcomed and supported.", label: "left"},
-      {text: "The government has a responsibility to provide a social safety net for its citizens, including healthcare, education, and housing.", label: "left"},
-      {text: "Peaceful diplomacy and international cooperation are essential for global stability and security.", label: "left"},
-      {text: "Individual freedom and personal responsibility are paramount.", label: "right"},
-      {text: "Limited government intervention leads to a more efficient and prosperous society.", label: "right"},
-      {text: "Lower taxes stimulate economic growth and create more opportunities for all.", label: "right"},
-      {text: "Traditional values and family structures should be upheld and protected.", label: "right"},
-      {text: "Strong national defense is crucial for protecting our way of life.", label: "right"},
-      {text: "Free market competition drives innovation and economic progress.", label: "right"},
-      {text: "Illegal immigration should be discouraged and border security strengthened.", label: "right"},
-      {text: "The right to bear arms is a fundamental constitutional right.", label: "right"},
-      {text: "Government should be smaller and more focused, with less bureaucracy.", label: "right"},
-      {text: "Merit should be the primary factor in hiring and advancement, not quotas or affirmative action.", label: "right"},
+      { text: 'Amidst growing concerns over income inequality, progressive lawmakers are pushing for legislation to raise the minimum wage to $15 per hour. Advocates argue that increasing the minimum wage will help lift millions of low-wage workers out of poverty and stimulate economic growth. They point to studies showing that higher wages lead to increased consumer spending, which benefits businesses and boosts the overall economy. However, opponents of the proposal, including many conservative lawmakers and business groups, argue that raising the minimum wage could lead to job losses and harm small businesses, particularly in rural areas where operating costs are already high. The debate over the minimum wage has become a central issue in the ongoing political discourse, with both sides fiercely advocating for their respective positions.', label: 'Left'},
+      { text: 'As the Biden administration continues to push for expansive government spending and regulatory measures, conservative lawmakers are sounding the alarm over the potential consequences for economic stability and individual freedoms. Critics argue that the proposed tax hikes and increased government intervention in the economy will stifle innovation, discourage investment, and ultimately harm job creation. They warn that excessive government spending will lead to inflation and burden future generations with unsustainable debt. Furthermore, conservatives express concerns about the erosion of personal liberty and the encroachment of government authority into various aspects of citizens\' lives. With ideological divides widening, the debate over the role of government and the direction of economic policy is intensifying, setting the stage for a contentious political battle in the months ahead.', label: 'Right'},
+      { text: '"In the wake of recent mass shootings, progressive activists are renewing calls for stricter gun control measures to address the epidemic of gun violence in the United States. Advocates argue that implementing universal background checks, banning assault weapons, and implementing red flag laws are essential steps to prevent future tragedies and protect public safety. They point to statistics showing that countries with stricter gun laws have lower rates of gun-related deaths and argue that the Second Amendment should not be a barrier to common-sense gun reform. However, opponents of gun control measures, including many conservative lawmakers and gun rights advocates, argue that such laws infringe on the constitutional rights of law-abiding citizens and do little to deter criminals. They emphasize the importance of enforcing existing laws and addressing mental health issues as alternative solutions to reducing gun violence.', label: 'Left'},
+      { text: 'As violent crime rates continue to rise in cities across the country, conservative leaders are calling for a return to tough-on-crime policies to restore law and order. Critics blame progressive policies such as defunding the police and lenient sentencing for contributing to the surge in crime, and argue that a more robust law enforcement presence is needed to combat criminal activity effectively. They advocate for policies such as increased funding for police departments, crackdowns on drug trafficking and gang violence, and stricter sentencing guidelines for repeat offenders. However, opponents of tough-on-crime measures, including many progressive activists and criminal justice reform advocates, argue that such policies disproportionately target communities of color and perpetuate systemic inequalities in the criminal justice system. They call for investments in community-based alternatives to incarceration and reforms to address root causes of crime, such as poverty and lack of access to education and economic opportunities.', label: 'Right'},
+      { text: 'In the face of mounting threats to reproductive rights, progressive activists are mobilizing to defend access to abortion and reproductive healthcare. With the Supreme Court poised to reconsider the landmark Roe v. Wade decision, which legalized abortion nationwide, advocates are sounding the alarm over the potential rollback of abortion rights and the erosion of women\'s autonomy over their own bodies. They argue that restricting access to abortion disproportionately harms marginalized communities, including low-income women and women of color, who already face barriers to healthcare access. Furthermore, advocates emphasize the importance of protecting abortion as a fundamental right and ensuring that all women have the ability to make decisions about their own bodies and futures. As states enact increasingly restrictive abortion laws, the battle over reproductive rights has become a central issue in the ongoing political discourse, with both sides fiercely advocating for their respective positions.', label: 'Left'},
+      { text: 'As the abortion debate intensifies across the nation, conservative lawmakers are advancing legislation to protect the sanctity of life and restrict access to abortion. With growing public support for pro-life policies, states are enacting measures to limit abortion, such as banning the procedure after a fetal heartbeat is detected or prohibiting certain abortion procedures later in pregnancy. Critics of abortion argue that the procedure is morally wrong and constitutes the taking of innocent human life. They emphasize the need to protect unborn children and provide support for pregnant women facing difficult circumstances. Furthermore, opponents of abortion rights highlight the potential physical and psychological risks associated with the procedure and argue that women deserve accurate information and compassionate alternatives to abortion. As the debate over abortion rights continues to divide the nation, the battle over the sanctity of life remains a deeply divisive and contentious issue in American politics.', label: 'Right'},
       {text: "Despite claims of economic prosperity, many Americans continue to struggle with stagnant wages and rising living costs. Income inequality remains a pressing issue, with the wealthiest individuals and corporations benefiting disproportionately from recent tax policies. Critics argue that government intervention is necessary to address these disparities and ensure a more equitable distribution of wealth.", label: "left"},
       {text: "The ongoing debate over healthcare has highlighted the need for comprehensive reform. Advocates for universal healthcare argue that access to affordable medical services is a basic human right, while opponents fear increased government control and inefficiency. The current system, they argue, prioritizes profits over people's well-being.", label: "left"},
       {text: "As climate change accelerates, urgent action is needed to mitigate its impact. The scientific consensus is clear: human activities are driving global warming, leading to more frequent and severe weather events. Policies that prioritize renewable energy and sustainable practices are crucial to combating this existential threat.", label: "left"},
@@ -148,16 +134,12 @@ router.post("/traits", async (req, res) => {
       {text: "Traditional values and family structures are under threat from cultural shifts and societal changes. Critics of progressive social movements argue that they undermine the foundations of society and erode moral standards. They advocate for preserving traditional family values and cultural norms.", label: "right"},
       {text: "National security is paramount in an increasingly complex and dangerous world. Strong borders and a robust military are essential for protecting the nation from external threats. Critics of isolationist policies argue that engagement with allies and a strong military presence are necessary to maintain peace and stability globally.", label: "right"}
   
-  ]
-  ,
-    inputs: [
-        input
     ],
+    inputs: [input]
   })
-  
-  console.log("politicalSide", politicalSide);
-  rArray.push(politicalSide.classifications[0].labels.left.confidence)
-  
+
+  console.log("toneLeft", toneLeft);
+  rArray.push(toneLeft.classifications[0].labels.Left.confidence);
 
   let summary = {};
   try {
