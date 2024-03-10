@@ -4,12 +4,7 @@ import { Input } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
 import "./News.css";
-<<<<<<< HEAD
-//import axios from 'axios';
-=======
-import axios from 'axios';
 import logo from './2.png';
->>>>>>> 9e908dc26715cfe67e405a447989d2913ff40fc2
 
 const { Title, Te } = Typography;
 const SERVERHOST = 3001;
@@ -40,15 +35,6 @@ function News() {
         setBias(state.text);
         setCriticality(state.text);
         // setNegativity(state.text);
-<<<<<<< HEAD
-        console.log(state);
-        const input = {"input": state.text} 
-        // /*axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input) */
-        // .then(response => {
-  
-        //   console.log('Success:', response.data);
-        //   let negativity = response.data.percentage * 100
-=======
         // console.log(state);
         // const input = {"input": state.text} 
         // axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input)
@@ -56,7 +42,6 @@ function News() {
   
         //   console.log('Success:', response.data);
         //   let negativity = response.data[0] * 100
->>>>>>> 9e908dc26715cfe67e405a447989d2913ff40fc2
         //   setNegativity(negativity.toFixed(2));
         // })
         // .catch(error => {
