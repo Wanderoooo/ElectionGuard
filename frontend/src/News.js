@@ -35,6 +35,7 @@ function News() {
     const [c, setc] = useState("CRITICALITY");
     const [lr, setlr] = useState("LEFT/RIGHT LEANING");
 
+    const [loadings, setLoadings] = useState([]);
 
     const [state, setState] = useState(0);
     const navigate = useNavigate();
@@ -85,12 +86,23 @@ function News() {
         navigate("/");
     }
     function analyze(e) {
+        setLoadings((prevLoadings) => {
+            const newLoadings = [...prevLoadings];
+            newLoadings[0] = true;
+            return newLoadings;
+          });
+
         setStatus("normal");
-        console.log(state);
-        const input = {"input": state.text, "language": "en"} 
+        const input = {"input": state.text, "language": lang.value} 
         axios.post(`http://localhost:${SERVERHOST}/classify/traits`, input)
         .then(response => {
-        
+            setLoadings((prevLoadings) => {
+                const newLoadings = [...prevLoadings];
+                newLoadings[0] = false;
+                return newLoadings;
+              });
+              
+            console.log((response.data[0]));
             setNegativity((response.data[0]*100).toFixed(2));
             setPolarizing((response.data[1]*100).toFixed(2));
             setBias((response.data[2]*100).toFixed(2));
@@ -171,7 +183,8 @@ function News() {
                                 ]}
                             />
                             <ConfigProvider contentFontSizeLG={20}>
-                                <Button style={{ padding: "0px 20px" }} size="large" type="primary" onClick={analyze} >{analyzer}</Button>
+                                <Button style={{ padding: "0px 20px" }} size="large" type="primary" loading={loadings[0]}
+          onClick={analyze} >{analyzer}</Button>
                             </ConfigProvider>
                         </div>
 
