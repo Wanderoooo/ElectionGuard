@@ -234,7 +234,6 @@ router.post("/traits", async (req, res) => {
   res.send(rArray)
 });
 
-
 async function summarizeText(input) {
   const summary = await cohere.summarize({
     text: input
@@ -243,7 +242,4 @@ async function summarizeText(input) {
   return summary;
 }
 
-
 module.exports = router;
-
-
