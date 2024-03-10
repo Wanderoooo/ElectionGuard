@@ -200,7 +200,6 @@ router.post("/traits", async (req, res) => {
 
   rArray.push(politicalSide);
 
-  rArray.push(toneLeft.classifications[0].labels.Left.confidence);
   const collection6 = db.collection('left');
   delete toneLeft.classifications[0].input;
   const leftInsert = await collection6.insertOne({ inputId, ...toneLeft.classifications[0], _id: toneLeft.id })
