@@ -116,7 +116,7 @@ function App() {
           />
       </Header>
       <FrontLanding onClick={mm} button={button} />
-      <Content style={{ padding: '0' }}>
+      <Content style={{ padding: '0',}}>
         
         <div
           style={{

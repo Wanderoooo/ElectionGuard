@@ -30,7 +30,7 @@ function News() {
     const [status, setStatus] = useState("exception");
     const [left, setLeft] = useState(-1);
     const [lang, setLang] = useState("en");
-    const [summary, setSummary] = useState("summarizing!");
+    const [summary, setSummary] = useState("");
     const [analyzer, setAnalyzer] = useState("ANALYZE");
     const [mainmenu, setmm] = useState("Menu");
     const [hf, sethf] = useState("ANALYSIS OF YOUR NEWS ARTICLE");
@@ -128,6 +128,10 @@ function News() {
                 setCriticality((response.data[3] * 100).toFixed(2));
                 setFake((response.data[4] * 100).toFixed(2));
                 setLeft((response.data[5] * 100).toFixed(2));
+                setSummary(response.data[6]);
+                tab[0][1] = response.data[7];
+                tab[1][1] = response.data[8];
+                tab[2][1] = response.data[9];
 
 
                 console.log('Success:', response.data);
@@ -208,7 +212,7 @@ function News() {
 
                     <Content
                         style={{
-                            padding: '20px 20px',
+                            padding: '0px 20px',
                             background: colorBgContainer,
                             textAlign: 'center',
                             color: 'black',
@@ -289,7 +293,7 @@ function News() {
 
 
                             <Flex vertical={true} gap="big" wrap="wrap" style={{
-                                padding: '20px 0px',
+                                padding: '0px 0px',
                                 background: colorBgContainer,
                                 textAlign: 'center',
                                 alignItems: 'center',
@@ -303,7 +307,7 @@ function News() {
                     </Content>
 
                     <Content style={{
-                        padding: '20px 100px',
+                        padding: '0px 100px',
                         background: colorBgContainer,
                         textAlign: 'center',
                         alignItems: 'center',
@@ -318,10 +322,11 @@ function News() {
                                 color: 'black',
                             }}>
                                 <h2>{hs}</h2>
+                                <h4>{summary}</h4>
                             </div>
 
                             <div style={{
-                                padding: '25px 25px',
+                                padding: '0px 25px',
                                 background: colorBgContainer,
                                 textAlign: 'center',
                                 alignItems: 'center',
