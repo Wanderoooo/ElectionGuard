@@ -29,13 +29,11 @@ function News() {
         navigate("/");
     }
     function analyze(e) {
-<<<<<<< HEAD
         setStatus("normal");
         setNegativity(state.text);
         setPolarizing(state.text);
         setBias(state.text);
         setCriticality(state.text);
-=======
         // setNegativity(state.text);
         console.log(state);
         const input = {"input": state.text} 
@@ -49,7 +47,6 @@ function News() {
         .catch(error => {
           console.error('Error:', error);
         });
->>>>>>> 38b22eedeb923971cb590b934889c9620addbb31
     }
     const {
         token: { colorBgContainer, borderRadiusLG },
