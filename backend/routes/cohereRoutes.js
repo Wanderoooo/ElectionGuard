@@ -107,9 +107,22 @@ router.post("/traits", async (req, res) => {
   console.log("toneFake", toneFake);
   rArray.push(toneFake.classifications[0].labels.fake.confidence)
   
+  const summary = await summarizeText(input);
+  rArray.push(summary.summary);
+
   console.log("rArray", rArray)
+
   res.send(rArray)
 });
 
 
+async function summarizeText(input) {
+  const summary = await cohere.summarize({
+    text: input
+  });
+  console.log(summary);
+  return summary;
+}
 module.exports = router;
+
+
