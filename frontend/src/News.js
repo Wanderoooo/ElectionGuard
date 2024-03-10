@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Layout, Menu, theme, Button, Progress, Flex, Typography, ConfigProvider } from 'antd';
+import { useCallback } from "react";
+import Wave from 'react-wavify'
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
 import { Input, Select, Space, Tooltip, Tabs } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
@@ -8,6 +12,7 @@ import "./News.css";
 import axios from 'axios';
 import logo from "./Copy of NEWS.png"
 import logo2 from "./Copy of NEWS (1).gif";
+import FrontLanding from './FrontLanding';
 
 const { Title, Te } = Typography;
 const SERVERHOST = 3001;
@@ -42,6 +47,13 @@ function News() {
 
     const [state, setState] = useState(0);
     const navigate = useNavigate();
+    const particlesInit = useCallback(async engine => {      
+        await loadFull(engine);
+      }, []);
+    
+    const particlesLoaded = useCallback(async container => {
+      await console.log(container);
+    }, []);
 
     const handleChange = (value) => {
         setLang(value )
@@ -126,18 +138,6 @@ function News() {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
-
-    const data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }];
-
-    const renderLineChart = (
-        <LineChart width={600} height={300} data={data}>
-            <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-            <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="name" />
-            <YAxis />
-        </LineChart>
-    );
-
     return (
         <Layout>
             <Header
@@ -155,13 +155,14 @@ function News() {
 
                 <Menu onClick={mm} theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={['2']}>
-                    <Menu.Item key="Main Menu" >
+                    defaultSelectedKeys={['2']} >
+                    <Menu.Item key="Main Menu" style={{backgroundColor: '#00008B', borderRadius: '5px', height: '35px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px'}} >
                         <span level={5} style={{ color: 'white' }} className="nav-text">{mainmenu}</span>
                     </Menu.Item>
                 </Menu>
 
             </Header>
+            <FrontLanding />
             <Content
                 style={{
                     padding: '0 48px',
@@ -180,9 +181,6 @@ function News() {
                             minHeight: 280,
                         }}
                     >
-
-
-                        <Input placeholder="URL" />
                         <br />
                         <br />
                         <TextArea rows={20} placeholder="" onChange={e => setState({ text: e.target.value })} />
