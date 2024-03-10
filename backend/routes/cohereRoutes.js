@@ -18,7 +18,7 @@ const fs = require('fs')
 fs.createReadStream('data/Fake.csv')
   .pipe(csv())
   .on('data', (row) => {
-    fakedata.push({ text: row.text, label: 'fake' });
+    fakedata.push({ text: row.text, label: 'Fake' });
   })
   .on('end', () => {
     // console.log(fakedata);
@@ -26,7 +26,7 @@ fs.createReadStream('data/Fake.csv')
 fs.createReadStream('data/True.csv')
   .pipe(csv())
   .on('data', (row) => {
-    realdata.push({ text: row.text, label: 'true' });
+    realdata.push({ text: row.text, label: 'True' });
   })
   .on('end', () => {
     // console.log(realdata);
@@ -112,6 +112,7 @@ router.post("/traits", async (req, res) => {
     
       console.log("tonePolarizing: ", tonePolarizing);
       rArray.push(tonePolarizing.classifications[0].labels.Polarizing.confidence)
+      const polarizingConfidence = tonePolarizing.classifications[0].labels.Polarizing.confidence;
       const collection2 = db.collection('polarizing');
       delete tonePolarizing.classifications[0].input;
       const polarInsert = await collection2.insertOne({ inputId, ...tonePolarizing.classifications[0], _id: tonePolarizing.id })
@@ -129,6 +130,7 @@ router.post("/traits", async (req, res) => {
 
   console.log("toneBiased: ", toneBiased);
   rArray.push(toneBiased.classifications[0].labels.Biased.confidence)
+  const biasConfidence = toneBiased.classifications[0].labels.Biased.confidence;
   const collection3 = db.collection('bias');
   delete toneBiased.classifications[0].input;
   const biasInsert = await collection3.insertOne({ inputId, ...toneBiased.classifications[0], _id: toneBiased.id })
@@ -146,6 +148,7 @@ router.post("/traits", async (req, res) => {
 
   console.log("toneCritical", toneCritical);
   rArray.push(toneCritical.classifications[0].labels.Critical.confidence)
+  const criticalConfidence = toneCritical.classifications[0].labels.Critical.confidence;
   const collection4 = db.collection('critical');
   delete tonePositive.classifications[0].input;
   const toneInsert = await collection4.insertOne({ inputId, ...toneCritical.classifications[0], _id: toneCritical.id })
@@ -158,7 +161,8 @@ router.post("/traits", async (req, res) => {
   })
   
   console.log("toneFake", toneFake);
-  rArray.push(toneFake.classifications[0].labels.fake.confidence)
+  rArray.push(toneFake.classifications[0].labels.Fake.confidence)
+  const fakeConfidence = toneFake.classifications[0].labels.Fake.confidence;
   const collection5 = db.collection('truthness');
   delete toneFake.classifications[0].input;
   const truthInsert = await collection5.insertOne({ inputId, ...toneFake.classifications[0], _id: toneFake.id })
@@ -202,8 +206,9 @@ router.post("/traits", async (req, res) => {
   console.log("actual summary", actualSummary)
   rArray.push(actualSummary);
 
+  const avgConfidence = (biasConfidence + polarizingConfidence + criticalConfidence + fakeConfidence) / 4.0;
   const collection8 = db.collection('input');
-  const inputInsert = await collection8.insertOne({ id: inputId, input, language: req.body.language, date: new Date() })
+  const inputInsert = await collection8.insertOne({ id: inputId, input, language: req.body.language, date: new Date(), avgConfidence })
 
 
   console.log("rArray", rArray)
