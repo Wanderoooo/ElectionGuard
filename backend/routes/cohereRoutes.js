@@ -28,8 +28,7 @@ fs.createReadStream('data/True.csv')
     // console.log(realdata);
   });
 
-router.get("/sentiment", async (req, res) => {
-    console.log("request: ", req);
+router.post("/sentiment", async (req, res) => {
     const classify = await cohere.classify({
         examples: [...fakedata.slice(0,100), ...realdata.slice(0,100)],
         inputs: [
@@ -43,8 +42,10 @@ router.get("/sentiment", async (req, res) => {
 
   });
 
-router.get("/traits", async (req, res) => {
-    let rArray = [];
+router.post("/traits", async (req, res) => {
+    const input = req.body.input;
+    console.log("input", req)
+    const rArray = [];
     const tonePositive = await cohere.classify({
         examples: [
             { text: 'The President signed the bipartisan bill into law today, marking a significant step forward in addressing the nation\'s infrastructure challenges.', label: 'Neutral' },
@@ -59,11 +60,11 @@ router.get("/traits", async (req, res) => {
             { text: 'A backlash ensued after Donald Trump launched a sexist rant against Kirsten Gillibrand Thursday morning, saying that the Democratic Senator  would do anything  for a campaign contribution.', label: 'Negative'},
             { text: 'donald trump is a great person', label: 'Positive'}
           ],
-          inputs: ["donald trump is a great person"]
+          inputs: [input]
       })
 
       console.log("tonePositive: ", tonePositive);
-      rArray = rArray.concat(tonePositive.classifications.map((obj) => ({ label: 'Negative', percentage: obj.labels.Negative.confidence })))
+      rArray.push(tonePositive.classifications[0].labels.Negative.confidence)
 
       const tonePolarizing = await cohere.classify({
         examples: [
@@ -74,11 +75,11 @@ router.get("/traits", async (req, res) => {
             { text: 'Donald Trump, the former President of the United States, made a public appearance at a charity event in New York City yesterday. The event, organized by a local nonprofit organization, aimed to raise funds for community projects. Trump delivered a brief speech during the event, focusing on the importance of philanthropy and community involvement. Attendees included local residents, business leaders, and representatives from various organizations. The event concluded successfully, with funds raised exceeding the initial goal.', label: 'Unifying'},
             { text: 'In a recent interview, former President Donald Trump discussed his views on various economic and foreign policy issues. During the interview, conducted by a prominent journalist, Trump addressed topics such as trade relations, immigration, and global security. He provided insights into his administration\'s policies and shared his perspectives on current events. The interview generated widespread interest among the public and received coverage across various media outlets. Trump\'s remarks were met with both support and criticism from different segments of the population.', label: 'Unifying'}
         ],
-        inputs: ["donald trump is horrible person"],
+        inputs: [input],
       })
     
       console.log("tonePolarizing: ", tonePolarizing);
-      rArray = rArray.concat(tonePolarizing.classifications.map((obj) => ({ label: 'Polarizing', percentage: obj.labels.Polarizing.confidence })))
+      rArray.push(tonePolarizing.classifications[0].labels.Polarizing.confidence)
 
       const toneBiased = await cohere.classify({
         examples: [
@@ -88,11 +89,11 @@ router.get("/traits", async (req, res) => {
             { text: 'A Georgian-American businessman who met then-Miss Universe pageant owner Donald Trump in 2013, has been questioned by congressional investigators about whether he helped organize a meeting between Russians and Trumps eldest son during the 2016 election campaign, four sources familiar with the matter said. The meeting at Trump Tower in New York involving Donald Trump Jr. and other campaign advisers is a focus of probes by Congress and Special Counsel Robert Mueller on whether campaign officials colluded with Russia when it sought to interfere in the U.S. election, the sources said. Russia denies allegations by U.S. intelligence agencies that it meddled in the election and President Donald Trump denies any collusion. The Senate and House of Representatives intelligence committees recently questioned behind closed doors Irakly Kaveladze, a U.S. citizen born in the former Soviet republic of Georgia, the sources said. He is a U.S.-based representative of Azerbaijani oligarch Aras Agalarovs real estate firm, the Crocus Group. The panels knew Kaveladze was at the June 9, 2016 meeting but became more interested in him after learning he also attended a private dinner in Las Vegas in 2013 with Trump and Agalarov as they celebrated an agreement to hold that years Miss Universe pageant in Moscow, the sources said.  Committee members now want to know more about the extent of Kaveladzes contacts with the Trump family and whether he had a bigger role than previously believed in setting up the Trump Tower meeting when Trump was a Republican candidate for president. The White House declined to comment. Muellers office also declined to comment. Scott Balber, a New York lawyer who represents Kaveladze, confirmed that his client attended both the dinner in Las Vegas and the Trump Tower meeting but said he did not set up the second meeting. Trumps son-in-law Jared Kushner, other Trump campaign aides, and Russian lawyer Natalia Veselnitskaya were also at that meeting. Lawyer Balber also said the committees were only seeking Kaveladzes input as a witness and were not targeting him for investigation. No-one has ever told me that they have any interest in him other than as a witness, Balber said. Lawyers for Trump Jr. and Kushner did not respond to requests for comment about their contacts with Kaveladze.??A lawyer for President Trump declined to comment.', label: 'Objective'},
             { text: 'Alabama Secretary of State John Merrill said he will certify Democratic Senator-elect Doug Jones as winner on Thursday despite opponent Roy Moores challenge, in a phone call on CNN. Moore, a conservative who had faced allegations of groping teenage girls when he was in his 30s, filed a court challenge late on Wednesday to the outcome of a U.S. Senate election he unexpectedly lost.', label: 'Objective'}
         ],
-        inputs: ["donald trump is horrible person"],
+        inputs: [input],
   });
 
   console.log("toneBiased: ", toneBiased);
-  rArray = rArray.concat(toneBiased.classifications.map((obj) => ({ label: 'Biased', percentage: obj.labels.Biased.confidence })))
+  rArray.push(toneBiased.classifications[0].labels.Biased.confidence)
 
   const toneCritical = await cohere.classify({
     examples: [
@@ -102,11 +103,11 @@ router.get("/traits", async (req, res) => {
         { text: 'Congress passed a bipartisan bill aimed at providing relief to small businesses affected by the COVID-19 pandemic. The bill, which received overwhelming support from both Democrats and Republicans, allocates funding for grants and loans to help struggling businesses stay afloat during these challenging times. President Biden praised the bipartisan cooperation and swiftly signed the bill into law, emphasizing the importance of supporting small businesses as they work to recover and rebuild. The relief measures included in the bill are expected to provide much-needed assistance to entrepreneurs and employees across the country, stimulating economic growth and revitalizing local communities.', label: 'Favorable'},
         { text: 'State legislators passed a bipartisan bill aimed at improving access to education for underprivileged students. The bill, which received strong support from both sides of the aisle, includes provisions for expanding early childhood education programs, increasing funding for low-income schools, and providing scholarships for students from disadvantaged backgrounds. Governor [Name] praised the collaborative efforts of lawmakers and signed the bill into law, stating that it represents a significant step towards ensuring equal opportunities for all students. The legislation is expected to positively impact the lives of countless children and families across the state, setting them on a path towards success and prosperity.', label: 'Favorable'}
     ],
-    inputs: ["donald trump is horrible person"],
+    inputs: [input],
   });
 
   console.log("toneCritical", toneCritical);
-  rArray = rArray.concat(toneCritical.classifications.map((obj) => ({ label: 'Critical', percentage: obj.labels.Critical.confidence })))
+  rArray.push(toneCritical.classifications[0].labels.Critical.confidence)
   console.log("rArray", rArray)
   res.send(rArray)
 });
