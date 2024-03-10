@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-.titleSmall {
+/* .titleSmall {
   font-family: 'Yeseva';
 }
 
@@ -16,7 +16,7 @@ p {
 
 button {
   font-family: 'Courier Prime';
-}
+} */
 
 .headerName {
   color: white;
@@ -39,5 +39,7 @@ button {
   }
 
   
+}
+body{
 }
 

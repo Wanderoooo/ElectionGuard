@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Layout, Menu, theme, Button, Progress, Flex, Typography, ConfigProvider } from 'antd';
+import { useCallback } from "react";
+import Wave from 'react-wavify'
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
 import { Input, Select, Space, Tooltip, Tabs } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Scatter } from 'react-chartjs-2';
 import "./News.css";
 import axios from 'axios';
 import logo from "./Copy of NEWS.png"
 import logo2 from "./Copy of NEWS (1).gif";
+import FrontLanding from './FrontLanding';
+import Icon from '@ant-design/icons';
+import {InfoCircleFilled} from '@ant-design/icons';
 
 const { Title, Te } = Typography;
 const SERVERHOST = 3001;
@@ -23,7 +30,7 @@ function News() {
     const [status, setStatus] = useState("exception");
     const [left, setLeft] = useState(-1);
     const [lang, setLang] = useState("en");
-    const [summary, setSummary] = useState("summarizing!");
+    const [summary, setSummary] = useState("");
     const [analyzer, setAnalyzer] = useState("ANALYZE");
     const [mainmenu, setmm] = useState("Menu");
     const [hf, sethf] = useState("ANALYSIS OF YOUR NEWS ARTICLE");
@@ -36,15 +43,22 @@ function News() {
     const [c, setc] = useState("CRITICALITY");
     const [lr, setlr] = useState("LEFT/RIGHT LEANING");
 
-    const [tab, setTab] = useState([[["left"], ["content"]], [["center"], ["content"]], [["right"], ["content"]]]);
+    const [tab, setTab] = useState([[["LEFT"], ["content"], [<InfoCircleFilled style={{color: 'blue' }}/>]], [["CENTER"], ["content"], [<InfoCircleFilled />]], [["RIGHT"], ["content"], [<InfoCircleFilled style={{color: 'red' }} />]]]);
 
     const [loadings, setLoadings] = useState([]);
 
     const [state, setState] = useState(0);
     const navigate = useNavigate();
+    const particlesInit = useCallback(async engine => {      
+        await loadFull(engine);
+      }, []);
+    
+    const particlesLoaded = useCallback(async container => {
+      await console.log(container);
+    }, []);
 
     const handleChange = (value) => {
-        setLang(value )
+        setLang(value)
         if (value == "en") {
             setAnalyzer("ANALYZE");
             setmm("Menu");
@@ -57,6 +71,10 @@ function News() {
             setb("BIAS");
             setc("CRITICALITY");
             setlr("LEFT/RIGHT LEANING");
+
+            tab[0][0] = "LEFT";
+            tab[1][0] = "CENTER";
+            tab[2][0] = "RIGHT";
         } else if (value == "fr") {
             setAnalyzer("ANALYSER");
             setmm("Menu");
@@ -69,6 +87,10 @@ function News() {
             setb("BIAS");
             setc("CRITICITÉ");
             setlr("TENDANCE GAUCHE/DROITE");
+
+            tab[0][0] = "GAUCHE";
+            tab[1][0] = "CENTRE";
+            tab[2][0] = "DROITE";
         } else {
             setAnalyzer("ANALICE");
             setmm("Menú");
@@ -81,6 +103,10 @@ function News() {
             setb("BIAS");
             setc("CRÍTICA");
             setlr("INCLINACIÓN IZQUIERDA/DERECHA");
+
+            tab[0][0] = "IZQUIERDA";
+            tab[1][0] = "CENTRO";
+            tab[2][0] = "DERECHA";
         }
     };
 
@@ -114,6 +140,10 @@ function News() {
                 setCriticality((response.data[3] * 100).toFixed(2));
                 setFake((response.data[4] * 100).toFixed(2));
                 setLeft((response.data[5] * 100).toFixed(2));
+                setSummary(response.data[6]);
+                tab[0][1] = response.data[7];
+                tab[1][1] = response.data[8];
+                tab[2][1] = response.data[9];
 
 
                 console.log('Success:', response.data);
@@ -125,18 +155,6 @@ function News() {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
-
-    const data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }];
-
-    const renderLineChart = (
-        <LineChart width={600} height={300} data={data}>
-            <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-            <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="name" />
-            <YAxis />
-        </LineChart>
-    );
 
     return (
         <Layout>
@@ -151,12 +169,12 @@ function News() {
                 <div className="demo-logo" />
                 <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
                     onMouseOut={e => (e.currentTarget.src = logo)} />
-                <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
+                <Title style={{ color: 'white', fontWeight: 700} }>ELECTION GUARD</Title>
 
                 <Menu onClick={mm} theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={['2']}>
-                    <Menu.Item key="Main Menu" >
+                    defaultSelectedKeys={['2']} >
+                    <Menu.Item key="Main Menu" style={{backgroundColor: '#00008B', borderRadius: '5px', height: '35px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px'}} >
                         <span level={5} style={{ color: 'white' }} className="nav-text">{mainmenu}</span>
                     </Menu.Item>
                 </Menu>
@@ -180,9 +198,6 @@ function News() {
                             minHeight: 280,
                         }}
                     >
-
-
-                        <Input placeholder="URL" />
                         <br />
                         <br />
                         <TextArea rows={20} placeholder="" onChange={e => setState({ text: e.target.value })} />
@@ -209,7 +224,7 @@ function News() {
 
                     <Content
                         style={{
-                            padding: '20px 20px',
+                            padding: '0px 20px',
                             background: colorBgContainer,
                             textAlign: 'center',
                             color: 'black',
@@ -290,7 +305,7 @@ function News() {
 
 
                             <Flex vertical={true} gap="big" wrap="wrap" style={{
-                                padding: '20px 0px',
+                                padding: '0px 0px',
                                 background: colorBgContainer,
                                 textAlign: 'center',
                                 alignItems: 'center',
@@ -304,7 +319,7 @@ function News() {
                     </Content>
 
                     <Content style={{
-                        padding: '20px 100px',
+                        padding: '0px 100px',
                         background: colorBgContainer,
                         textAlign: 'center',
                         alignItems: 'center',
@@ -319,27 +334,42 @@ function News() {
                                 color: 'black',
                             }}>
                                 <h2>{hs}</h2>
+                                <h4>{summary}</h4>
                             </div>
 
                             <div style={{
-                                padding: '25px 25px',
+                                padding: '0px 25px',
                                 background: colorBgContainer,
                                 textAlign: 'center',
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Tabs
-                                centered
+                                <ConfigProvider
+                                    theme={{
+                                        components: {
+                                            Tabs: {
+                                                itemColor: 'grey',
+                                                itemSelectedColor: 'black',
+                                                inkBarColor: 'blue',
+                                            },
+                                        },
+                                    }}
+                                >
+                                    <Tabs
+                                    centered
                                     type="card"
                                     items={new Array(3).fill(null).map((_, i) => {
                                         const id = String(i);
                                         return {
                                             label: tab[id][0],
                                             key: id,
-                                            children: tab[id],
+                                            children: tab[id][1],
+                                            icon: tab[id][2],
                                         };
                                     })}
                                 />
+                                </ConfigProvider>
+                                
                             </div>
                         </Flex>
 

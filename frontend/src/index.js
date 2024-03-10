@@ -15,7 +15,7 @@ root.render(
         <Route path='/news' element={<News />} />
         <Route path='/history' element={<History />} />
       </Routes>
-    </BrowserRouter>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
