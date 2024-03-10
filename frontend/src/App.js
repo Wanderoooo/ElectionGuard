@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import './App.css';
 import { Select, Flex, Button, Image, Breadcrumb, Layout, Menu, theme, Typography } from 'antd';
+import gifImage from './newspaper2.gif'
 import { FlexProps, SegmentedProps } from 'antd';
+import newsIcon from './news.png';
 
 import logo from './Copy of NEWS.png';
 import logo2 from './Copy of NEWS (1).gif';
-import bgPic from './Newspapers_Getty2.jpg'
+import newscomp from './newcomp.gif';
 import { useNavigate } from "react-router-dom";
 import FrontLanding from './FrontLanding';
 
@@ -116,15 +118,13 @@ function App() {
           />
       </Header>
       <FrontLanding onClick={mm} button={button} />
-      <Content style={{ padding: '0' }}>
+      <Content style={{ padding: '0', paddingBottom: '200px', backgroundColor: 'white' }}>
         
         <div
           style={{
-            padding: 24,
             minHeight: 800,
-            maxHeight: 1000,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            maxHeight: 2000,
+            backgroundColor: 'white',
           }}
         >
           
@@ -133,36 +133,21 @@ function App() {
           <Flex style={boxStyle} justify={'baseline'} vertical={true}>
 
           {/* <img className='bgImg' src={bgPic} /> */}
-          <div
-          style={{
-            padding: 5,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        ></div>
-          
-          <div
-          style={{
-            padding: 5,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        ></div>
+          <img src={newscomp} style={{height: '400px', width: '400px', marginLeft: '800px'}} />
           <div style={{marginLeft: '190px'}}>
           <h1 style={{color: '#00008B', fontSize: '50px'}}> {title}</h1>
           <h5 style={{color: '#00008B', fontSize: '20px', width: '1000px'}}>
             {descr}
           </h5>
           </div>
+          <div>
+            <img src={gifImage} style={{height: '400px', width: '500px'}} />
+          </div>
           </Flex>
-
-        
-
+          
         </div>
         
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
-      </Footer>
     </Layout>
   );
 };
