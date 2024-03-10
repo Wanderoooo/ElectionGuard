@@ -116,7 +116,6 @@ function News() {
     }
     function analyze(e) {
 
-        setStatus("normal");
         const input = { "input": state.text, "language": lang }
         console.log(lang.value);
         setLoadings((prevLoadings) => {
@@ -133,6 +132,7 @@ function News() {
                     return newLoadings;
                 });
 
+                setStatus("normal");
                 console.log((response.data[0]));
                 setNegativity((response.data[0] * 100).toFixed(2));
                 setPolarizing((response.data[1] * 100).toFixed(2));
@@ -178,7 +178,16 @@ function News() {
                         <span level={5} style={{ color: 'white' }} className="nav-text">{mainmenu}</span>
                     </Menu.Item>
                 </Menu>
-
+                <Select
+                    defaultValue="English"
+                    style={{ width: 120, paddingRight: 10, marginLeft: '650px' }}
+                    onChange={handleChange}
+                    options={[
+                        { value: 'en', label: 'English' },
+                        { value: 'fr', label: 'Français' },
+                        { value: 'es', label: 'Español' },
+                    ]}
+                />
             </Header>
             <Content
                 style={{
@@ -204,25 +213,15 @@ function News() {
                         <br />
                         <br />
                         <div>
-                            <Select
-                                defaultValue="English"
-                                style={{ width: 120, paddingRight: 10 }}
-                                onChange={handleChange}
-                                options={[
-                                    { value: 'en', label: 'English' },
-                                    { value: 'fr', label: 'Français' },
-                                    { value: 'es', label: 'Español' },
-                                ]}
-                            />
                             <ConfigProvider contentFontSizeLG={20}>
-                                <Button style={{ padding: "0px 20px" }} size="large" type="primary" loading={loadings[0]}
+                                <Button style={{ padding: "0px 20px", backgroundColor: '#00008B' }} size="large" type="primary" loading={loadings[0]}
                                     onClick={analyze} >{analyzer}</Button>
                             </ConfigProvider>
                         </div>
 
                     </Content>
 
-                    <Content
+                    {status === 'normal' && <><Content
                         style={{
                             padding: '0px 20px',
                             background: colorBgContainer,
@@ -373,7 +372,7 @@ function News() {
                             </div>
                         </Flex>
 
-                    </Content>
+                    </Content></>}
                 </Layout>
             </Content>
             <Footer
