@@ -32,19 +32,7 @@ fs.createReadStream('data/True.csv')
     // console.log(realdata);
   });
 
-router.post("/sentiment", async (req, res) => {
-    const classify = await cohere.classify({
-        examples: [...fakedata.slice(0,100), ...realdata.slice(0,100)],
-        inputs: [
-            "Campaign will be focused on getting more busses to campus",
-            "I will provide 100000$ dollars to everyone",
-        ],
-    })
 
-    console.log(classify);
-    res.send(classify);
-
-  });
 
 router.post("/traits", async (req, res) => {
     let input = req.body.input;
@@ -116,27 +104,33 @@ router.post("/traits", async (req, res) => {
 
   console.log("toneCritical", toneCritical);
   rArray.push(toneCritical.classifications[0].labels.Critical.confidence)
+  
+  const toneFake = await cohere.classify({
+    examples: [...fakedata.slice(0,100), ...realdata.slice(0,100)],
+    inputs: [
+        input
+    ],
+  })
+  
+  console.log("toneFake", toneFake);
+  rArray.push(toneFake.classifications[0].labels.fake.confidence)
+  
+  const summary = await summarizeText(input);
+  rArray.push(summary.summary);
+
   console.log("rArray", rArray)
+
   res.send(rArray)
 });
 
 
-router.post("/sentiment", async (req, res) => {
-    let input = req.body.input;
-    const classify = await cohere.classify({
-        examples: [...fakedata.slice(0,100), ...realdata.slice(0,100)],
-        inputs: [
-            input
-        ],
-    })
-  
-    console.log(classify);
-    const output = {percentage: classify.classifications[0].labels.fake.confidence,
-      label: "negative"}
-    
-    res.send(output);
-
+async function summarizeText(input) {
+  const summary = await cohere.summarize({
+    text: input
   });
-
-
+  console.log(summary);
+  return summary;
+}
 module.exports = router;
+
+
