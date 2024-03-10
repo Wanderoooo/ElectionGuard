@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
 import "./News.css";
 import axios from 'axios';
+import logo from './2.png';
 
 const { Title, Te } = Typography;
 const SERVERHOST = 3001;
@@ -29,27 +30,24 @@ function News() {
         navigate("/");
     }
     function analyze(e) {
-<<<<<<< HEAD
         setStatus("normal");
         setNegativity(state.text);
         setPolarizing(state.text);
         setBias(state.text);
         setCriticality(state.text);
-=======
         // setNegativity(state.text);
-        console.log(state);
-        const input = {"input": state.text} 
-        axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input)
-        .then(response => {
+        // console.log(state);
+        // const input = {"input": state.text} 
+        // axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input)
+        // .then(response => {
   
-          console.log('Success:', response.data);
-          let negativity = response.data.percentage * 100
-          setNegativity(negativity.toFixed(2));
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
->>>>>>> 38b22eedeb923971cb590b934889c9620addbb31
+        //   console.log('Success:', response.data);
+        //   let negativity = response.data[0] * 100
+        //   setNegativity(negativity.toFixed(2));
+        // })
+        // .catch(error => {
+        //   console.error('Error:', error);
+        // });
     }
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -66,6 +64,7 @@ function News() {
                 }}
             >
                 <div className="demo-logo" />
+                <img src={logo} className='bgImg' width={colorBgContainer - 10} height={50 }/>
                 <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
 
                 <Menu onClick={mm} theme="dark"
@@ -127,53 +126,53 @@ function News() {
                             alignItems: 'center',
                             color: 'black',
                         }}>
-                            <h1>ANALYSIS OF YOUR NEWS ARTICLE</h1>
+                            <h2>ANALYSIS OF YOUR NEWS ARTICLE</h2>
                         </div>
                         <div>
                             <Flex gap="small" wrap="wrap" style={{
-                                padding: '25px 25px',
+                                padding: '20px 20px',
                                 background: colorBgContainer,
                                 textAlign: 'center',
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
                                 <Progress type="circle" percent={negativity} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status} />
-                                <h1>NEGATIVITY</h1>
+                                <h3>NEGATIVITY</h3>
                             </Flex>
 
                             <Flex gap="small" wrap="wrap" style={{
-                                padding: '25px 25px',
+                                padding: '20px 20px',
                                 background: colorBgContainer,
                                 textAlign: 'center',
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
                                 <Progress type="circle" percent={polarizing} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status}/>
-                                <h1>POLARIZING</h1>
+                                <h3>POLARIZING</h3>
                             </Flex>
                         </div>
 
                         <div>
                             <Flex gap="small" wrap="wrap" style={{
-                                padding: '25px 25px',
+                                padding: '20px 20px',
                                 background: colorBgContainer,
                                 textAlign: 'center',
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
                                 <Progress type="circle" percent={bias} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status}/>
-                                <h1>BIAS</h1>
+                                <h3>BIAS</h3>
                             </Flex>
 
                             <Flex gap="small" wrap="wrap" style={{
-                                padding: '25px 25px',
+                                padding: '20px 20px',
                                 background: colorBgContainer,
                                 textAlign: 'center',
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
                                 <Progress type="circle" percent={criticality} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status}/>
-                                <h1>CRITICALITY</h1>
+                                <h3>CRITICALITY</h3>
                             </Flex>
                         </div>
 
