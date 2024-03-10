@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './index.css';
-import { Flex, Button, Image, Breadcrumb, Layout, Menu, theme, Typography } from 'antd';
+import { Select, Flex, Button, Image, Breadcrumb, Layout, Menu, theme, Typography } from 'antd';
 import { FlexProps, SegmentedProps } from 'antd';
 
 import logo from './Copy of NEWS.png';
@@ -13,7 +13,7 @@ const boxStyle = {
   width: '100%',
   height: 120,
   borderRadius: 6,
-  border: '1px solid #40a9ff',
+  border: '1px',
 };
 
 
@@ -41,7 +41,11 @@ function App() {
       navigate("/");
     }
 
-    
+    const handleChange = (value) => {
+      setLang({value})
+  };
+  const [lang, setLang] = useState("en");
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -70,8 +74,8 @@ function App() {
         <div
           style={{
             padding: 24,
-            minHeight: 500,
-            maxHeight: 700,
+            minHeight: 700,
+            maxHeight: 1000,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
@@ -82,11 +86,32 @@ function App() {
           <Flex style={boxStyle} justify={'baseline'} vertical={true}>
 
           <img className='bgImg' src={bgPic} width={colorBgContainer - 10} height={400 }/>
-          <Button onClick={mm} type="primary">Fake news?</Button>
+          <div>
 
+          </div>
+          <Button onClick={mm} type="primary">Fake news? Let's check!</Button>
+
+          <Select
+              defaultValue="English"
+              style={{ width: 120, paddingRight:10}}
+              onChange={handleChange}
+              options={[
+                { value: 'en', label: 'English' },
+                { value: 'fr', label: 'French' },
+                { value: 'sp', label: 'Spanish' },
+              ]}
+          />
+
+          <h1> What is Election Guard?</h1>
+          <p>Welcome the Election Guard! The platform integrates sentiment analysis, 
+            semantic disambiguation 
+            for precise truth discernment. Additionally, we have included additional languages 
+            for fake news detection for greater coverage and inclusivity. We ensure immutable transparency and inclusivity, 
+            safeguarding against digital deception. 
+            Join us in navigating the information landscape with clarity and confidence.</p>
           </Flex>
 
-
+        
 
         </div>
         
