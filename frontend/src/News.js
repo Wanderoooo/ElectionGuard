@@ -3,7 +3,7 @@ import { Breadcrumb, Layout, Menu, theme, Button, Progress, Flex, Typography, Co
 import { Input, Select, Space, Tooltip } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Scatter } from 'react-chartjs-2';
 import "./News.css";
 import axios from 'axios';
 import logo from "./Copy of NEWS.png"
@@ -121,18 +121,6 @@ function News() {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
-    
-    const data = [{name: 'Page A', uv: 400, pv: 2400, amt: 2400}];
-
-    const renderLineChart = (
-        <LineChart width={600} height={300} data={data}>
-            <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-            <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="name" />
-            <YAxis />
-        </LineChart>
-    );
 
     return (
         <Layout>
@@ -325,7 +313,7 @@ function News() {
                         }}>
                             {/* <h3>SUMMARY OF YOUR ARTICLE</h3> */}
                         </div>
-                        {renderLineChart}
+                        
                     </Content>
                 </Layout>
             </Content>
