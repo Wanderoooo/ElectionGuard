@@ -1,10 +1,19 @@
 import React from 'react';
 import './index.css';
-import { Button, Image, Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Flex, Button, Image, Breadcrumb, Layout, Menu, theme } from 'antd';
+import { FlexProps, SegmentedProps } from 'antd';
+
 import logo from './2.png';
 import bgPic from './Newspapers_Getty.jpg'
 import { useNavigate } from "react-router-dom";
 
+
+const boxStyle = {
+  width: '100%',
+  height: 120,
+  borderRadius: 6,
+  border: '1px solid #40a9ff',
+};
 
 
 const {  Header, Content, Footer } = Layout;
@@ -22,7 +31,7 @@ function App() {
   const navigate = useNavigate();
     function mm(e) {
         console.log("hello");
-        navigate("/app");
+        navigate("/news");
     }
 
 
@@ -56,16 +65,24 @@ function App() {
         <div
           style={{
             padding: 24,
-            minHeight: 380,
+            minHeight: 500,
+            maxHeight: 700,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >
           
-          <img className='bgImg' src={bgPic} width={colorBgContainer - 10} height={400 }/>
+          
+          
+          <Flex style={boxStyle} justify={'baseline'} vertical={true}>
 
+          <img className='bgImg' src={bgPic} width={colorBgContainer - 10} height={400 }/>
           <Button onClick={mm} type="primary">Fake news?</Button>
-  
+
+          </Flex>
+
+
+
         </div>
         
       </Content>
