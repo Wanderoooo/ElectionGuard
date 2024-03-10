@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import { Breadcrumb, Layout, Menu, theme, Button, Progress, Flex, Typography,ConfigProvider } from 'antd';
-import { Input } from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Button, Progress, Flex, Typography, ConfigProvider } from 'antd';
+import { Input, Select, Space } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
 import "./News.css";
-<<<<<<< HEAD
 //import axios from 'axios';
-=======
-import axios from 'axios';
-import logo from './2.png';
->>>>>>> 9e908dc26715cfe67e405a447989d2913ff40fc2
+import logo from "./2.png"
 
 const { Title, Te } = Typography;
 const SERVERHOST = 3001;
@@ -26,9 +22,15 @@ function News() {
     const [bias, setBias] = useState(-1);
     const [criticality, setCriticality] = useState(-1);
     const [status, setStatus] = useState("exception");
+    const [lang, setLang] = useState("en");
 
     const [state, setState] = useState(0);
     const navigate = useNavigate();
+
+    const handleChange = (value) => {
+        setLang({value})
+    };
+
     function mm(e) {
         console.log("hello");
         navigate("/");
@@ -40,23 +42,13 @@ function News() {
         setBias(state.text);
         setCriticality(state.text);
         // setNegativity(state.text);
-<<<<<<< HEAD
-        console.log(state);
-        const input = {"input": state.text} 
-        // /*axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input) */
-        // .then(response => {
-  
-        //   console.log('Success:', response.data);
-        //   let negativity = response.data.percentage * 100
-=======
         // console.log(state);
         // const input = {"input": state.text} 
         // axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input)
         // .then(response => {
-  
+
         //   console.log('Success:', response.data);
         //   let negativity = response.data[0] * 100
->>>>>>> 9e908dc26715cfe67e405a447989d2913ff40fc2
         //   setNegativity(negativity.toFixed(2));
         // })
         // .catch(error => {
@@ -78,7 +70,7 @@ function News() {
                 }}
             >
                 <div className="demo-logo" />
-                <img src={logo} className='bgImg' width={colorBgContainer - 10} height={50 }/>
+                <img src={logo} className='bgImg' width={colorBgContainer - 10} height={50} />
                 <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
 
                 <Menu onClick={mm} theme="dark"
@@ -116,9 +108,21 @@ function News() {
                         <TextArea rows={20} placeholder="Content" onChange={e => setState({ text: e.target.value })} />
                         <br />
                         <br />
-                        <ConfigProvider contentFontSizeLG={20}>
-                            <Button size="large" type="primary" onClick={analyze} >ANALYZE</Button>
-                        </ConfigProvider>
+                        <div>
+                            <Select
+                                defaultValue="English"
+                                style={{ width: 120, paddingRight:10}}
+                                onChange={handleChange}
+                                options={[
+                                    { value: 'en', label: 'English' },
+                                    { value: 'fr', label: 'French' },
+                                    { value: 'sp', label: 'Spanish' },
+                                ]}
+                            />
+                            <ConfigProvider contentFontSizeLG={20}>
+                                <Button style={{ padding: "0px 20px"}} size="large" type="primary" onClick={analyze} >ANALYZE</Button>
+                            </ConfigProvider>
+                        </div>
 
                     </Content>
 
@@ -150,7 +154,7 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Progress type="circle" percent={negativity} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status} />
+                                <Progress type="circle" percent={negativity} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
                                 <h3>NEGATIVITY</h3>
                             </Flex>
 
@@ -161,7 +165,7 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Progress type="circle" percent={polarizing} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status}/>
+                                <Progress type="circle" percent={polarizing} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
                                 <h3>POLARIZING</h3>
                             </Flex>
                         </div>
@@ -174,7 +178,7 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Progress type="circle" percent={bias} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status}/>
+                                <Progress type="circle" percent={bias} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
                                 <h3>BIAS</h3>
                             </Flex>
 
@@ -185,7 +189,7 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Progress type="circle" percent={criticality} strokeColor="red" success={ {percent: 0, strokeColor: "red"}} status={status}/>
+                                <Progress type="circle" percent={criticality} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
                                 <h3>CRITICALITY</h3>
                             </Flex>
                         </div>
