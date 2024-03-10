@@ -35,10 +35,10 @@ function News() {
         axios.post(`http://localhost:${SERVERHOST}/classify/traits`, input)
         .then(response => {
         
-            setNegativity(response.data[0].toFixed(2) *100);
-            setPolarizing(response.data[1].toFixed(2) * 100);
-            setBias(response.data[2].toFixed(2) * 100);
-            setCriticality(response.data[3].toFixed(2) * 100);
+            setNegativity((response.data[0]*100).toFixed(2));
+            setPolarizing((response.data[1]*100).toFixed(2));
+            setBias((response.data[2]*100).toFixed(2));
+            setCriticality((response.data[3]* 100).toFixed(2));
 
           console.log('Success:', response.data);
         })
