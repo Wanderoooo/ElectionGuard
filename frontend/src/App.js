@@ -72,8 +72,8 @@ function App() {
         setTitle("Qu'est-ce que Election Guard?");
         setDescr("Bienvenue à Election Guard ! La plateforme intègre l'analyse des sentiments, la désambiguïsation sémantique pour un discernement précis de la vérité. En outre, nous avons inclus des langues supplémentaires pour la détection des fausses nouvelles afin d'assurer une plus grande couverture et une plus grande inclusivité. Nous garantissons une transparence et une inclusivité immuables, en nous protégeant contre la tromperie numérique. Rejoignez-nous pour naviguer dans le paysage de l'information avec clarté et confiance.");
         setTitleY("Votre");
-        setTitleT("radar");
-        setTitleR("de confiance");
+        setTitleT("Radar");
+        setTitleR("de Confiance");
         <FrontLanding onClick={mm} button={button} value={langVal} y={titleY} t={titleT} r={titleR}/>
 
 
@@ -86,8 +86,8 @@ function App() {
         setTitle("¿Qué es la Election Guard?");
         setDescr("Bienvenido a Election Guard La plataforma integra análisis de sentimientos y desambiguación semántica para un discernimiento preciso de la verdad. Además, hemos incluido idiomas adicionales para la detección de noticias falsas para una mayor cobertura e inclusividad. Garantizamos transparencia e inclusividad inmutables, protegiendo contra el engaño digital. Únase a nosotros para navegar por el panorama informativo con claridad y confianza.");
         setTitleY("Su");
-        setTitleT("radar");
-        setTitleR("de confianza");
+        setTitleT("Radar");
+        setTitleR("de Confianza");
         <FrontLanding onClick={mm} button={button} value={langVal} y={titleY} t={titleT} r={titleR}/>
 
 
@@ -152,8 +152,8 @@ function App() {
         <div
           style={{
             padding: 24,
-            minHeight: 800,
-            maxHeight: 1000,
+            minHeight: 600,
+            maxHeight: 800,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
