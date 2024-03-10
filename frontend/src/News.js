@@ -4,7 +4,7 @@ import { Input, Select, Space, Tooltip } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
 import "./News.css";
-//import axios from 'axios';
+import axios from 'axios';
 import logo from "./Copy of NEWS.png"
 import logo2 from "./Copy of NEWS (1).gif";
 
@@ -86,26 +86,24 @@ function News() {
     }
     function analyze(e) {
         setStatus("normal");
-        setNegativity(state.text);
-        setPolarizing(state.text);
-        setBias(state.text);
-        setCriticality(state.text);
-        setFake(state.text);
-        setLeft(state.text);
+        console.log(state);
+        const input = {"input": state.text, "language": "en"} 
+        axios.post(`http://localhost:${SERVERHOST}/classify/traits`, input)
+        .then(response => {
+        
+            setNegativity((response.data[0]*100).toFixed(2));
+            setPolarizing((response.data[1]*100).toFixed(2));
+            setBias((response.data[2]*100).toFixed(2));
+            setCriticality((response.data[3]* 100).toFixed(2));
+            setFake((response.data[4]* 100).toFixed(2));
+            setLeft((response.data[5]* 100).toFixed(2));
 
-        // setNegativity(state.text);
-        // console.log(state);
-        // const input = {"input": state.text} 
-        // axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input)
-        // .then(response => {
 
-        //   console.log('Success:', response.data);
-        //   let negativity = response.data[0] * 100
-        //   setNegativity(negativity.toFixed(2));
-        // })
-        // .catch(error => {
-        //   console.error('Error:', error);
-        // });
+          console.log('Success:', response.data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
     }
     const {
         token: { colorBgContainer, borderRadiusLG },
