@@ -1,8 +1,12 @@
+const deepl = require('deepl-node');
 const express = require("express");
 const router = express.Router();
 const csv = require('csv-parser');
 const fakedata = [];
 const realdata = [];
+
+const authKey = "fa1181bd-8416-7024-11c9-11e04ee164a7:fx";
+const translator = new deepl.Translator(authKey);
 
 const { CohereClient } = require("cohere-ai");
 
@@ -31,7 +35,11 @@ fs.createReadStream('data/True.csv')
 
 
 router.post("/traits", async (req, res) => {
-    const input = req.body.input;
+    let input = req.body.input;
+    if (req.body.language !== 'en') {
+      const inputText = await translator.translateText(input, null, 'en-US');
+      input = inputText.text;
+    }
     console.log("input", req)
     const rArray = [];
     const tonePositive = await cohere.classify({
@@ -107,8 +115,21 @@ router.post("/traits", async (req, res) => {
   console.log("toneFake", toneFake);
   rArray.push(toneFake.classifications[0].labels.fake.confidence)
   
-  const summary = await summarizeText(input);
-  rArray.push(summary.summary);
+  let summary = {};
+  try {
+    summary = await summarizeText(input);
+  } catch {
+    summary.summary = "Article too short to summarize";
+    // silent fail if input < 250 characters
+  }
+
+  let actualSummary = summary.summary;
+  if (req.body.language !== 'en' && actualSummary !== "Article too short to summarize") {
+    const summaryText = await translator.translateText(actualSummary, null, req.body.language);
+    actualSummary = summaryText.text;
+  }
+  console.log("actual summary", actualSummary)
+  rArray.push(actualSummary);
 
   console.log("rArray", rArray)
 
