@@ -69,6 +69,7 @@ router.post("/traits", async (req, res) => {
 
     const inputId = uuidv4();
     let input = req.body.input;
+    console.log("body", req.body);
     if (req.body.language !== 'en') {
       const inputText = await translator.translateText(input, null, 'en-US');
       input = inputText.text;

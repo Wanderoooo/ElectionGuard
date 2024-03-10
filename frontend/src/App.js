@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './index.css';
+import './App.css';
 import { Select, Flex, Button, Image, Breadcrumb, Layout, Menu, theme, Typography } from 'antd';
 import { FlexProps, SegmentedProps } from 'antd';
 
@@ -88,7 +88,7 @@ function App() {
         <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
                 onMouseOut={e => (e.currentTarget.src = logo)} onClick={ll} />
 
-        <Title style={{ color: 'white', onClick:{ll}} }>ELECTION GUARD  </Title>
+        <Title style={{ color: 'white', fontFamily:'Cinzel' , fontWeight: 500} } className='title'>ELECTION GUARD  </Title>
 
         
       </Header>
@@ -116,7 +116,7 @@ function App() {
             borderRadius: borderRadiusLG,
           }}
         ></div>
-          <Button onClick={mm} type="primary">{button}</Button>
+          <Button onClick={mm} type="primary" fontFamily='Courier Prime'>{button}</Button>
           <div
           style={{
             padding: 5,
@@ -144,7 +144,7 @@ function App() {
               ]}
           />
 
-          <h1> {title}</h1>
+          <h1 > {title}</h1>
           <p>
             {descr}
             </p>
