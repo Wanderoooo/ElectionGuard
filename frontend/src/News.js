@@ -30,16 +30,16 @@ function News() {
     }
     function analyze(e) {
         setStatus("normal");
-        setNegativity(state.text);
-        setPolarizing(state.text);
-        setBias(state.text);
-        setCriticality(state.text);
-        // setNegativity(state.text);
         console.log(state);
         const input = {"input": state.text} 
         axios.post(`http://localhost:${SERVERHOST}/classify/traits`, input)
         .then(response => {
-  
+        
+            setNegativity((response.data[0]*100).toFixed(2));
+            setPolarizing((response.data[1]*100).toFixed(2));
+            setBias((response.data[2]*100).toFixed(2));
+            setCriticality((response.data[3]* 100).toFixed(2));
+
           console.log('Success:', response.data);
         })
         .catch(error => {
