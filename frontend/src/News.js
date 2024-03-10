@@ -3,7 +3,9 @@ import { Breadcrumb, Layout, Menu, theme, Button, Progress, Flex } from 'antd';
 import { Input } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
+import axios from 'axios';
 
+const SERVERHOST = 3001;
 const { TextArea } = Input;
 const { Header, Content, Footer, Sider } = Layout;
 const items = new Array(1).fill(null).map((_, index) => ({
@@ -22,6 +24,15 @@ function News() {
     function analyze(e) {
         setConfidence(state.text);
         console.log(state);
+        const input = {"input": state.text} 
+        axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input)
+        .then(response => {
+  
+          console.log('Success:', response.data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
     }
     const {
         token: { colorBgContainer, borderRadiusLG },
