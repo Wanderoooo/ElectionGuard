@@ -1,7 +1,8 @@
-import React from 'react';
-import { Breadcrumb, Layout, Menu, theme, Button} from 'antd';
+import React, {useState} from 'react';
+import { Breadcrumb, Layout, Menu, theme, Button, Progress, Flex} from 'antd';
 import { Input } from 'antd';
 import { useNavigate } from "react-router-dom";
+import ProgressLine from "./ProgressLine";
 
 const { TextArea } = Input;
 const { Header, Content, Footer, Sider} = Layout;
@@ -11,13 +12,16 @@ const items = new Array(1).fill(null).map((_, index) => ({
 }));
 
 function News() {
+    const [confidence, setConfidence] = useState(0);
+    const [state, setState] = useState(0);
     const navigate = useNavigate();
     function mm(e) {
         console.log("hello");
         navigate("/app");
     }
     function analyze(e) {
-
+        setConfidence(state.text);
+        console.log(state);
     }
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -55,22 +59,6 @@ function News() {
                 borderRadius: borderRadiusLG,
               }}
             >
-              <Sider
-                style={{
-                  background: colorBgContainer,
-                }}
-                width={200}
-              >
-                <Menu
-                  mode="inline"
-                  defaultSelectedKeys={['1']}
-                  defaultOpenKeys={['sub1']}
-                  style={{
-                    height: '100%',
-                  }}
-                  items={items}
-                />
-              </Sider>
               <Content
                 style={{
                   padding: '0 24px',
@@ -82,10 +70,32 @@ function News() {
             <Input placeholder="URL Link" />
             <br />
             <br />
-            <TextArea rows={20} placeholder="Content"/>            
+            <TextArea rows={20} placeholder="Content" onChange={e => setState({ text: e.target.value })}/>            
             <br />
             <br/>
             <Button type="primary" onClick={analyze} >ANALYZE</Button> 
+
+              </Content>
+
+              <Content
+                style={{
+                padding: '100px 100px',
+                  background: colorBgContainer,
+                  textAlign: 'center',
+                  alignItems: 'center',
+                  color: 'black',
+                }}
+                width={200}
+              >
+                  <Flex gap="small" wrap="wrap">
+                    <Progress type="circle" percent={75} />
+                    <h1>CONFIDENCE</h1>
+                </Flex>
+
+                <Flex gap="small" wrap="wrap">
+                    <Progress type="circle" percent={75} />
+                    <h1>TOXICITY</h1>
+                </Flex>
 
               </Content>
             </Layout>
