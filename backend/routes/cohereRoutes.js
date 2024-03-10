@@ -115,6 +115,50 @@ router.post("/traits", async (req, res) => {
   console.log("toneFake", toneFake);
   rArray.push(toneFake.classifications[0].labels.fake.confidence)
   
+  const politicalSide = await cohere.classify({
+    examples: [
+      {text: "Healthcare is a human right, not a privilege.", label: "left"},
+      {text: "Climate change is a pressing global crisis that requires immediate action.", label: "left"},
+      {text: "Income inequality is a significant issue that needs to be addressed through progressive taxation and social programs.", label: "left"},
+      {text: "Education should be accessible to all, regardless of socioeconomic background.", label: "left"},
+      {text: "Workers' rights, including fair wages and safe working conditions, must be protected and strengthened.", label: "left"},
+      {text: "Systemic racism and discrimination exist and must be actively dismantled.", label: "left"},
+      {text: "Gender equality and LGBTQ+ rights are fundamental human rights.", label: "left"},
+      {text: "Immigrants make valuable contributions to society and should be welcomed and supported.", label: "left"},
+      {text: "The government has a responsibility to provide a social safety net for its citizens, including healthcare, education, and housing.", label: "left"},
+      {text: "Peaceful diplomacy and international cooperation are essential for global stability and security.", label: "left"},
+      {text: "Individual freedom and personal responsibility are paramount.", label: "right"},
+      {text: "Limited government intervention leads to a more efficient and prosperous society.", label: "right"},
+      {text: "Lower taxes stimulate economic growth and create more opportunities for all.", label: "right"},
+      {text: "Traditional values and family structures should be upheld and protected.", label: "right"},
+      {text: "Strong national defense is crucial for protecting our way of life.", label: "right"},
+      {text: "Free market competition drives innovation and economic progress.", label: "right"},
+      {text: "Illegal immigration should be discouraged and border security strengthened.", label: "right"},
+      {text: "The right to bear arms is a fundamental constitutional right.", label: "right"},
+      {text: "Government should be smaller and more focused, with less bureaucracy.", label: "right"},
+      {text: "Merit should be the primary factor in hiring and advancement, not quotas or affirmative action.", label: "right"},
+      {text: "Despite claims of economic prosperity, many Americans continue to struggle with stagnant wages and rising living costs. Income inequality remains a pressing issue, with the wealthiest individuals and corporations benefiting disproportionately from recent tax policies. Critics argue that government intervention is necessary to address these disparities and ensure a more equitable distribution of wealth.", label: "left"},
+      {text: "The ongoing debate over healthcare has highlighted the need for comprehensive reform. Advocates for universal healthcare argue that access to affordable medical services is a basic human right, while opponents fear increased government control and inefficiency. The current system, they argue, prioritizes profits over people's well-being.", label: "left"},
+      {text: "As climate change accelerates, urgent action is needed to mitigate its impact. The scientific consensus is clear: human activities are driving global warming, leading to more frequent and severe weather events. Policies that prioritize renewable energy and sustainable practices are crucial to combating this existential threat.", label: "left"},
+      {text: "The Black Lives Matter movement has brought renewed attention to systemic racism and police brutality in the United States. Calls for police reform and racial justice have grown louder, with many demanding accountability for law enforcement officers and a reimagining of public safety.", label: "left"},
+      {text: "Immigration remains a divisive issue, with heated debates over border security and immigration policy. While some argue for stricter controls to protect national security, others emphasize the humanitarian need to welcome refugees and provide a path to citizenship for undocumented immigrants.", label: "left"},
+      {text: "Recent tax cuts have spurred economic growth, leading to record-low unemployment rates and a booming stock market. Critics argue that these tax cuts primarily benefit the wealthy, but supporters point to the overall positive impact on job creation and the economy as a whole. The current administration's pro-business policies have been credited with revitalizing industries and attracting investment, signaling a strong and resilient economy under conservative leadership.", label: "right"},
+      {text: "Efforts to roll back regulations have been praised for freeing businesses from burdensome red tape and stimulating innovation. Critics, however, warn of potential environmental and safety risks associated with deregulation. The debate centers on finding a balance between economic freedom and regulatory oversight.", label: "right"},
+      {text: "The Second Amendment guarantees the right to bear arms, a principle that many Americans hold dear. Advocates for gun rights argue that responsible gun ownership is a fundamental aspect of individual liberty and a crucial means of self-defense. They oppose efforts to restrict access to firearms, citing the need to protect this constitutional right.", label: "right"},
+      {text: "Traditional values and family structures are under threat from cultural shifts and societal changes. Critics of progressive social movements argue that they undermine the foundations of society and erode moral standards. They advocate for preserving traditional family values and cultural norms.", label: "right"},
+      {text: "National security is paramount in an increasingly complex and dangerous world. Strong borders and a robust military are essential for protecting the nation from external threats. Critics of isolationist policies argue that engagement with allies and a strong military presence are necessary to maintain peace and stability globally.", label: "right"}
+  
+  ]
+  ,
+    inputs: [
+        input
+    ],
+  })
+  
+  console.log("politicalSide", politicalSide);
+  rArray.push(politicalSide.classifications[0].labels.left.confidence)
+  
+
   let summary = {};
   try {
     summary = await summarizeText(input);
