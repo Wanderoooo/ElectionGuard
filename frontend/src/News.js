@@ -153,7 +153,7 @@ function News() {
                 <div className="demo-logo" />
                 <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
                     onMouseOut={e => (e.currentTarget.src = logo)} />
-                <Title style={{ color: 'white', fontFamily:'Cinzel' , fontWeight: 500} }>ELECTION GUARD</Title>
+                <Title style={{ color: 'white', fontWeight: 700} }>ELECTION GUARD</Title>
 
                 <Menu onClick={mm} theme="dark"
                     mode="horizontal"
@@ -164,7 +164,6 @@ function News() {
                 </Menu>
 
             </Header>
-            <FrontLanding />
             <Content
                 style={{
                     padding: '0 48px',

@@ -7,6 +7,7 @@ import logo from './Copy of NEWS.png';
 import logo2 from './Copy of NEWS (1).gif';
 import bgPic from './Newspapers_Getty2.jpg'
 import { useNavigate } from "react-router-dom";
+import FrontLanding from './FrontLanding';
 
 
 const boxStyle = {
@@ -81,50 +82,20 @@ function App() {
           display: 'flex',
           alignItems: 'center',
           color: 'white',
+          justifyContent: 'space-between',
         }}
       >
-        
-
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
                 onMouseOut={e => (e.currentTarget.src = logo)} onClick={ll} />
 
-        <Title style={{ color: 'white', fontFamily:'Cinzel' , fontWeight: 500} } className='title'>ELECTION GUARD  </Title>
-
-        
-      </Header>
-      <Content style={{ padding: '0 48px' }}>
-        
-        <div
-          style={{
-            padding: 24,
-            minHeight: 800,
-            maxHeight: 1000,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          
-          
-          
-          <Flex style={boxStyle} justify={'baseline'} vertical={true}>
-
-          <img className='bgImg' src={bgPic} />
-          <div
-          style={{
-            padding: 5,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        ></div>
-          <Button onClick={mm} type="primary" fontFamily='Courier Prime'>{button}</Button>
-          <div
-          style={{
-            padding: 5,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        ></div>
-          <Select
+        <Title style={{ color: 'white', fontWeight: 700} } className='title'>ELECTION GUARD</Title>
+        </div>
+        <Select
               defaultValue="English"
               style={{ width: 120, paddingRight:10}}
               onChange={handleChange}
@@ -143,11 +114,46 @@ function App() {
                   desLa: "Bienvenido a la Election Guard La plataforma integra análisis de sentimientos y desambiguación semántica para un discernimiento preciso de la verdad. Además, hemos incluido idiomas adicionales para la detección de noticias falsas para una mayor cobertura e inclusividad. Garantizamos transparencia e inclusividad inmutables, protegiendo contra el engaño digital. Únase a nosotros para navegar por el panorama informativo con claridad y confianza."},
               ]}
           />
+      </Header>
+      <FrontLanding onClick={mm} button={button} />
+      <Content style={{ padding: '0' }}>
+        
+        <div
+          style={{
+            padding: 24,
+            minHeight: 800,
+            maxHeight: 1000,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
+          
+          
+          
+          <Flex style={boxStyle} justify={'baseline'} vertical={true}>
 
-          <h1 > {title}</h1>
-          <p>
+          {/* <img className='bgImg' src={bgPic} /> */}
+          <div
+          style={{
+            padding: 5,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        ></div>
+          
+          <div
+          style={{
+            padding: 5,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        ></div>
+          <div style={{marginLeft: '190px'}}>
+          <h1 style={{color: '#00008B', fontSize: '50px'}}> {title}</h1>
+          <h5 style={{color: '#00008B', fontSize: '20px', width: '1000px'}}>
             {descr}
-            </p>
+          </h5>
+          </div>
           </Flex>
 
         
