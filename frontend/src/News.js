@@ -24,7 +24,7 @@ function News() {
     const [left, setLeft] = useState(-1);
     const [lang, setLang] = useState("en");
     const [summary, setSummary] = useState("summarizing!");
-    const [analyzer, setAnalyzer] = useState("Analyze");
+    const [analyzer, setAnalyzer] = useState("ANALYZE");
     const [mainmenu, setmm] = useState("Menu");
     const [hf, sethf] = useState("ANALYSIS OF YOUR NEWS ARTICLE");
     const [hs, seths] = useState("ARTICLE SUMMARY");
@@ -44,7 +44,7 @@ function News() {
     const navigate = useNavigate();
 
     const handleChange = (value) => {
-        setLang({ value })
+        setLang(value )
         if (value == "en") {
             setAnalyzer("ANALYZE");
             setmm("Menu");
@@ -91,7 +91,7 @@ function News() {
     function analyze(e) {
 
         setStatus("normal");
-        const input = { "input": state.text, "language": lang.value }
+        const input = { "input": state.text, "language": lang }
         console.log(lang.value);
         setLoadings((prevLoadings) => {
             const newLoadings = [...prevLoadings];
@@ -150,13 +150,8 @@ function News() {
             >
                 <div className="demo-logo" />
                 <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
-<<<<<<< HEAD
-                    onMouseOut={e => (e.currentTarget.src = logo)} onClick={mm} />
-                <Title style={{ color: 'white', onClick: { mm } }}>ELECTION GUARD</Title>
-=======
                     onMouseOut={e => (e.currentTarget.src = logo)} />
                 <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
->>>>>>> 39e8a11cf04e35e438a32368fb3d331cc6ec6e98
 
                 <Menu onClick={mm} theme="dark"
                     mode="horizontal"
