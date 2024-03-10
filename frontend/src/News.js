@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Layout, Menu, theme, Button, Progress, Flex, Typography, ConfigProvider } from 'antd';
-import { Input, Select, Space } from 'antd';
+import { Input, Select, Space, Tooltip } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
 import "./News.css";
@@ -12,25 +12,72 @@ const { Title, Te } = Typography;
 const SERVERHOST = 3001;
 const { TextArea } = Input;
 const { Header, Content, Footer, Sider } = Layout;
-const items = new Array(1).fill(null).map((_, index) => ({
-    key: String(index + 1),
-    label: `Main Menu`,
-}));
 
 function News() {
     const [negativity, setNegativity] = useState(-1);
     const [polarizing, setPolarizing] = useState(-1);
     const [bias, setBias] = useState(-1);
     const [criticality, setCriticality] = useState(-1);
+    const [fake, setFake] = useState(-1);
     const [status, setStatus] = useState("exception");
+    const [left, setLeft] = useState(-1);
     const [lang, setLang] = useState("en");
     const [summary, setSummary] = useState("summarizing!");
+    const [analyzer, setAnalyzer] = useState("Analyze");
+    const [mainmenu, setmm] = useState("Menu");
+    const [hf, sethf] = useState("ANALYSIS OF YOUR NEWS ARTICLE");
+    const [hs, seths] = useState("ARTICLE SUMMARY");
+
+    const [f, setf] = useState("FAKE");
+    const [n, setn] = useState("NEGATIVITY");
+    const [p, setp] = useState("POLARIZING");
+    const [b, setb] = useState("BIAS");
+    const [c, setc] = useState("CRITICALITY");
+    const [lr, setlr] = useState("LEFT/RIGHT LEANING");
+
 
     const [state, setState] = useState(0);
     const navigate = useNavigate();
 
     const handleChange = (value) => {
         setLang({ value })
+        if (value=="en") {
+            setAnalyzer("ANALYZE");
+            setmm("Menu");
+            sethf("ANALYSIS OF YOUR NEWS ARTICLE");
+            seths("ARTICLE SUMMARY");
+
+            setf("FAKE");
+            setn("NEGATIVITY");
+            setp("POLARIZING");
+            setb("BIAS");
+            setc("CRITICALITY");
+            setlr("LEFT/RIGHT LEANING");
+        } else if (value == "fr") {
+            setAnalyzer("ANALYSER");
+            setmm("Menu");
+            sethf("ANALYSE DE VOTRE ARTICLE DE PRESSE");
+            seths("RÉSUMÉ DE L'ARTICLE");
+
+            setf("FAUX");
+            setn("NÉGATIVITÉ");
+            setp("POLARISATION");
+            setb("BIAS");
+            setc("CRITICITÉ");
+            setlr("TENDANCE GAUCHE/DROITE");
+        } else {
+            setAnalyzer("ANALICE");
+            setmm("Menú");
+            sethf("ANÁLISIS DE SU ARTÍCULO PERIODÍSTICO")
+            seths("RESUMEN DEL ARTÍCULO");
+
+            setf("FALSO");
+            setn("NEGATIVIDAD");
+            setp("POLARIZACIÓN");
+            setb("BIAS");
+            setc("CRÍTICA");
+            setlr("INCLINACIÓN IZQUIERDA/DERECHA");
+        }
     };
 
     function mm(e) {
@@ -43,6 +90,8 @@ function News() {
         setPolarizing(state.text);
         setBias(state.text);
         setCriticality(state.text);
+        setFake(state.text);
+        setLeft(state.text);
 
         // setNegativity(state.text);
         // console.log(state);
@@ -81,7 +130,7 @@ function News() {
                     mode="horizontal"
                     defaultSelectedKeys={['2']}>
                     <Menu.Item key="Main Menu" >
-                        <text level={5} style={{ color: 'white' }} className="nav-text">Main Menu</text>
+                        <span level={5} style={{ color: 'white' }} className="nav-text">{mainmenu}</span>
                     </Menu.Item>
                 </Menu>
 
@@ -106,10 +155,10 @@ function News() {
                     >
 
 
-                        <Input placeholder="URL Link" />
+                        <Input placeholder="URL" />
                         <br />
                         <br />
-                        <TextArea rows={20} placeholder="Content" onChange={e => setState({ text: e.target.value })} />
+                        <TextArea rows={20} placeholder="" onChange={e => setState({ text: e.target.value })} />
                         <br />
                         <br />
                         <div>
@@ -119,12 +168,12 @@ function News() {
                                 onChange={handleChange}
                                 options={[
                                     { value: 'en', label: 'English' },
-                                    { value: 'fr', label: 'French' },
-                                    { value: 'es', label: 'Spanish' },
+                                    { value: 'fr', label: 'Français' },
+                                    { value: 'es', label: 'Español' },
                                 ]}
                             />
                             <ConfigProvider contentFontSizeLG={20}>
-                                <Button style={{ padding: "0px 20px" }} size="large" type="primary" onClick={analyze} >ANALYZE</Button>
+                                <Button style={{ padding: "0px 20px" }} size="large" type="primary" onClick={analyze} >{analyzer}</Button>
                             </ConfigProvider>
                         </div>
 
@@ -147,7 +196,18 @@ function News() {
                             alignItems: 'center',
                             color: 'black',
                         }}>
-                            <h2>ANALYSIS OF YOUR NEWS ARTICLE</h2>
+                            <h2>{hf}</h2>
+
+                            <Flex vertical={true} gap="small" wrap="wrap" style={{
+                                padding: '20px 20px',
+                                background: colorBgContainer,
+                                textAlign: 'center',
+                                alignItems: 'center',
+                                color: 'black',
+                            }}>
+                                <Progress type="circle" percent={fake} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
+                                <h3>{f}</h3>
+                            </Flex>
 
                             <Flex vertical={false} style={{
                                 textJustify: 'center',
@@ -163,7 +223,7 @@ function News() {
                                     color: 'black',
                                 }}>
                                     <Progress type="circle" percent={negativity} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
-                                    <h3>NEGATIVITY</h3>
+                                    <h3>{n}</h3>
                                 </Flex>
 
                                 <Flex vertical={true} gap="small" wrap="wrap" style={{
@@ -174,7 +234,7 @@ function News() {
                                     color: 'black',
                                 }}>
                                     <Progress type="circle" percent={polarizing} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
-                                    <h3>POLARIZING</h3>
+                                    <h3>{p}</h3>
                                 </Flex>
 
                                 <Flex vertical={true} gap="small" wrap="wrap" style={{
@@ -185,7 +245,7 @@ function News() {
                                     color: 'black',
                                 }}>
                                     <Progress type="circle" percent={bias} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
-                                    <h3>BIAS</h3>
+                                    <h3>{b}</h3>
                                 </Flex>
 
                                 <Flex vertical={true} gap="small" wrap="wrap" style={{
@@ -196,11 +256,23 @@ function News() {
                                     color: 'black',
                                 }}>
                                     <Progress type="circle" percent={criticality} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
-                                    <h3>CRITICALITY</h3>
+                                    <h3>{c}</h3>
                                 </Flex>
                             </Flex>
-                        </Flex>
 
+
+                            <Flex vertical={true} gap="big" wrap="wrap" style={{
+                                padding: '20px 0px',
+                                background: colorBgContainer,
+                                textAlign: 'center',
+                                alignItems: 'center',
+                                color: 'black',
+                            }}>
+                                <Progress percent={left} showInfo={false} strokeColor="blue" trailColor="red"/>
+                                <h3>{lr}</h3>
+                            </Flex>
+
+                        </Flex>
                     </Content>
 
                     <Content style={{
@@ -217,7 +289,7 @@ function News() {
                             alignItems: 'center',
                             color: 'black',
                         }}>
-                            <h2>ARTICLE SUMMARY</h2>
+                            <h2>{hs}</h2>
                         </div>
 
                         <div style={{
@@ -227,7 +299,7 @@ function News() {
                             alignItems: 'center',
                             color: 'black',
                         }}>
-                            <h3>SUMMARY OF YOUR ARTICLE</h3>
+                            {/* <h3>SUMMARY OF YOUR ARTICLE</h3> */}
                         </div>
                     </Content>
                 </Layout>
