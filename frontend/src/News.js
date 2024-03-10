@@ -4,7 +4,7 @@ import { Input, Select, Space, Tooltip } from 'antd';
 import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
 import "./News.css";
-//import axios from 'axios';
+import axios from 'axios';
 import logo from "./Copy of NEWS.png"
 import logo2 from "./Copy of NEWS (1).gif";
 
@@ -35,6 +35,7 @@ function News() {
     const [c, setc] = useState("CRITICALITY");
     const [lr, setlr] = useState("LEFT/RIGHT LEANING");
 
+    const [loadings, setLoadings] = useState([]);
 
     const [state, setState] = useState(0);
     const navigate = useNavigate();
@@ -85,27 +86,37 @@ function News() {
         navigate("/");
     }
     function analyze(e) {
+
         setStatus("normal");
-        setNegativity(state.text);
-        setPolarizing(state.text);
-        setBias(state.text);
-        setCriticality(state.text);
-        setFake(state.text);
-        setLeft(state.text);
+        const input = {"input": state.text, "language": lang.value} 
+        setLoadings((prevLoadings) => {
+            const newLoadings = [...prevLoadings];
+            newLoadings[0] = true;
+            return newLoadings;
+          });
 
-        // setNegativity(state.text);
-        // console.log(state);
-        // const input = {"input": state.text} 
-        // axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input)
-        // .then(response => {
+        axios.post(`http://localhost:${SERVERHOST}/classify/traits`, input)
+        .then(response => {
+            setLoadings((prevLoadings) => {
+                const newLoadings = [...prevLoadings];
+                newLoadings[0] = false;
+                return newLoadings;
+              });
 
-        //   console.log('Success:', response.data);
-        //   let negativity = response.data[0] * 100
-        //   setNegativity(negativity.toFixed(2));
-        // })
-        // .catch(error => {
-        //   console.error('Error:', error);
-        // });
+            console.log((response.data[0]));
+            setNegativity((response.data[0]*100).toFixed(2));
+            setPolarizing((response.data[1]*100).toFixed(2));
+            setBias((response.data[2]*100).toFixed(2));
+            setCriticality((response.data[3]* 100).toFixed(2));
+            setFake((response.data[4]* 100).toFixed(2));
+            setLeft((response.data[5]* 100).toFixed(2));
+
+
+          console.log('Success:', response.data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
     }
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -173,7 +184,8 @@ function News() {
                                 ]}
                             />
                             <ConfigProvider contentFontSizeLG={20}>
-                                <Button style={{ padding: "0px 20px" }} size="large" type="primary" onClick={analyze} >{analyzer}</Button>
+                                <Button style={{ padding: "0px 20px" }} size="large" type="primary" loading={loadings[0]}
+          onClick={analyze} >{analyzer}</Button>
                             </ConfigProvider>
                         </div>
 
