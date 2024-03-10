@@ -67,6 +67,7 @@ router.get("/traits", async (req, res) => {
       console.log("toxicity: ", classify);
       res.send(classify)
   });
+
 router.post("/sentiment", async (req, res) => {
     let input = req.body.input;
     const classify = await cohere.classify({
@@ -77,7 +78,10 @@ router.post("/sentiment", async (req, res) => {
     })
   
     console.log(classify); 
-    res.send(classify);
+    const output = {percentage: classify.classifications[0].labels.fake.confidence,
+      label: "negative"}
+    
+    res.send(output);
 
   });
 
