@@ -11,14 +11,14 @@ const translator = new deepl.Translator(authKey);
 const { CohereClient } = require("cohere-ai");
 
 const cohere = new CohereClient({
-    token: "stYbBQLQpwGJnSvFRntvuhF67BSm2TL7m4hVMSsT",
+    token: "Cv86n3lUzStoOgZmtv6Hcj4W9Nf7xceXCM46Plcb",
 });
 
 const fs = require('fs')
 fs.createReadStream('data/Fake.csv')
   .pipe(csv())
   .on('data', (row) => {
-    fakedata.push({ text: row.text, label: 'fake' });
+    fakedata.push({ text: row.text, label: 'Fake' });
   })
   .on('end', () => {
     // console.log(fakedata);
@@ -26,7 +26,7 @@ fs.createReadStream('data/Fake.csv')
 fs.createReadStream('data/True.csv')
   .pipe(csv())
   .on('data', (row) => {
-    realdata.push({ text: row.text, label: 'true' });
+    realdata.push({ text: row.text, label: 'True' });
   })
   .on('end', () => {
     // console.log(realdata);
@@ -69,6 +69,7 @@ router.post("/traits", async (req, res) => {
 
     const inputId = uuidv4();
     let input = req.body.input;
+    console.log("body", req.body);
     if (req.body.language !== 'en') {
       const inputText = await translator.translateText(input, null, 'en-US');
       input = inputText.text;
@@ -112,6 +113,7 @@ router.post("/traits", async (req, res) => {
     
       console.log("tonePolarizing: ", tonePolarizing);
       rArray.push(tonePolarizing.classifications[0].labels.Polarizing.confidence)
+      const polarizingConfidence = tonePolarizing.classifications[0].labels.Polarizing.confidence;
       const collection2 = db.collection('polarizing');
       delete tonePolarizing.classifications[0].input;
       const polarInsert = await collection2.insertOne({ inputId, ...tonePolarizing.classifications[0], _id: tonePolarizing.id })
@@ -129,6 +131,7 @@ router.post("/traits", async (req, res) => {
 
   console.log("toneBiased: ", toneBiased);
   rArray.push(toneBiased.classifications[0].labels.Biased.confidence)
+  const biasConfidence = toneBiased.classifications[0].labels.Biased.confidence;
   const collection3 = db.collection('bias');
   delete toneBiased.classifications[0].input;
   const biasInsert = await collection3.insertOne({ inputId, ...toneBiased.classifications[0], _id: toneBiased.id })
@@ -146,6 +149,7 @@ router.post("/traits", async (req, res) => {
 
   console.log("toneCritical", toneCritical);
   rArray.push(toneCritical.classifications[0].labels.Critical.confidence)
+  const criticalConfidence = toneCritical.classifications[0].labels.Critical.confidence;
   const collection4 = db.collection('critical');
   delete tonePositive.classifications[0].input;
   const toneInsert = await collection4.insertOne({ inputId, ...toneCritical.classifications[0], _id: toneCritical.id })
@@ -158,7 +162,8 @@ router.post("/traits", async (req, res) => {
   })
   
   console.log("toneFake", toneFake);
-  rArray.push(toneFake.classifications[0].labels.fake.confidence)
+  rArray.push(toneFake.classifications[0].labels.Fake.confidence)
+  const fakeConfidence = toneFake.classifications[0].labels.Fake.confidence;
   const collection5 = db.collection('truthness');
   delete toneFake.classifications[0].input;
   const truthInsert = await collection5.insertOne({ inputId, ...toneFake.classifications[0], _id: toneFake.id })
@@ -171,16 +176,16 @@ router.post("/traits", async (req, res) => {
       { text: 'As violent crime rates continue to rise in cities across the country, conservative leaders are calling for a return to tough-on-crime policies to restore law and order. Critics blame progressive policies such as defunding the police and lenient sentencing for contributing to the surge in crime, and argue that a more robust law enforcement presence is needed to combat criminal activity effectively. They advocate for policies such as increased funding for police departments, crackdowns on drug trafficking and gang violence, and stricter sentencing guidelines for repeat offenders. However, opponents of tough-on-crime measures, including many progressive activists and criminal justice reform advocates, argue that such policies disproportionately target communities of color and perpetuate systemic inequalities in the criminal justice system. They call for investments in community-based alternatives to incarceration and reforms to address root causes of crime, such as poverty and lack of access to education and economic opportunities.', label: 'Right'},
       { text: 'In the face of mounting threats to reproductive rights, progressive activists are mobilizing to defend access to abortion and reproductive healthcare. With the Supreme Court poised to reconsider the landmark Roe v. Wade decision, which legalized abortion nationwide, advocates are sounding the alarm over the potential rollback of abortion rights and the erosion of women\'s autonomy over their own bodies. They argue that restricting access to abortion disproportionately harms marginalized communities, including low-income women and women of color, who already face barriers to healthcare access. Furthermore, advocates emphasize the importance of protecting abortion as a fundamental right and ensuring that all women have the ability to make decisions about their own bodies and futures. As states enact increasingly restrictive abortion laws, the battle over reproductive rights has become a central issue in the ongoing political discourse, with both sides fiercely advocating for their respective positions.', label: 'Left'},
       { text: 'As the abortion debate intensifies across the nation, conservative lawmakers are advancing legislation to protect the sanctity of life and restrict access to abortion. With growing public support for pro-life policies, states are enacting measures to limit abortion, such as banning the procedure after a fetal heartbeat is detected or prohibiting certain abortion procedures later in pregnancy. Critics of abortion argue that the procedure is morally wrong and constitutes the taking of innocent human life. They emphasize the need to protect unborn children and provide support for pregnant women facing difficult circumstances. Furthermore, opponents of abortion rights highlight the potential physical and psychological risks associated with the procedure and argue that women deserve accurate information and compassionate alternatives to abortion. As the debate over abortion rights continues to divide the nation, the battle over the sanctity of life remains a deeply divisive and contentious issue in American politics.', label: 'Right'},
-      {text: "Despite claims of economic prosperity, many Americans continue to struggle with stagnant wages and rising living costs. Income inequality remains a pressing issue, with the wealthiest individuals and corporations benefiting disproportionately from recent tax policies. Critics argue that government intervention is necessary to address these disparities and ensure a more equitable distribution of wealth.", label: "left"},
-      {text: "The ongoing debate over healthcare has highlighted the need for comprehensive reform. Advocates for universal healthcare argue that access to affordable medical services is a basic human right, while opponents fear increased government control and inefficiency. The current system, they argue, prioritizes profits over people's well-being.", label: "left"},
-      {text: "As climate change accelerates, urgent action is needed to mitigate its impact. The scientific consensus is clear: human activities are driving global warming, leading to more frequent and severe weather events. Policies that prioritize renewable energy and sustainable practices are crucial to combating this existential threat.", label: "left"},
-      {text: "The Black Lives Matter movement has brought renewed attention to systemic racism and police brutality in the United States. Calls for police reform and racial justice have grown louder, with many demanding accountability for law enforcement officers and a reimagining of public safety.", label: "left"},
-      {text: "Immigration remains a divisive issue, with heated debates over border security and immigration policy. While some argue for stricter controls to protect national security, others emphasize the humanitarian need to welcome refugees and provide a path to citizenship for undocumented immigrants.", label: "left"},
-      {text: "Recent tax cuts have spurred economic growth, leading to record-low unemployment rates and a booming stock market. Critics argue that these tax cuts primarily benefit the wealthy, but supporters point to the overall positive impact on job creation and the economy as a whole. The current administration's pro-business policies have been credited with revitalizing industries and attracting investment, signaling a strong and resilient economy under conservative leadership.", label: "right"},
-      {text: "Efforts to roll back regulations have been praised for freeing businesses from burdensome red tape and stimulating innovation. Critics, however, warn of potential environmental and safety risks associated with deregulation. The debate centers on finding a balance between economic freedom and regulatory oversight.", label: "right"},
-      {text: "The Second Amendment guarantees the right to bear arms, a principle that many Americans hold dear. Advocates for gun rights argue that responsible gun ownership is a fundamental aspect of individual liberty and a crucial means of self-defense. They oppose efforts to restrict access to firearms, citing the need to protect this constitutional right.", label: "right"},
-      {text: "Traditional values and family structures are under threat from cultural shifts and societal changes. Critics of progressive social movements argue that they undermine the foundations of society and erode moral standards. They advocate for preserving traditional family values and cultural norms.", label: "right"},
-      {text: "National security is paramount in an increasingly complex and dangerous world. Strong borders and a robust military are essential for protecting the nation from external threats. Critics of isolationist policies argue that engagement with allies and a strong military presence are necessary to maintain peace and stability globally.", label: "right"}
+      {text: "Despite claims of economic prosperity, many Americans continue to struggle with stagnant wages and rising living costs. Income inequality remains a pressing issue, with the wealthiest individuals and corporations benefiting disproportionately from recent tax policies. Critics argue that government intervention is necessary to address these disparities and ensure a more equitable distribution of wealth.", label: "Left"},
+      {text: "The ongoing debate over healthcare has highlighted the need for comprehensive reform. Advocates for universal healthcare argue that access to affordable medical services is a basic human right, while opponents fear increased government control and inefficiency. The current system, they argue, prioritizes profits over people's well-being.", label: "Left"},
+      {text: "As climate change accelerates, urgent action is needed to mitigate its impact. The scientific consensus is clear: human activities are driving global warming, leading to more frequent and severe weather events. Policies that prioritize renewable energy and sustainable practices are crucial to combating this existential threat.", label: "Left"},
+      {text: "The Black Lives Matter movement has brought renewed attention to systemic racism and police brutality in the United States. Calls for police reform and racial justice have grown louder, with many demanding accountability for law enforcement officers and a reimagining of public safety.", label: "Left"},
+      {text: "Immigration remains a divisive issue, with heated debates over border security and immigration policy. While some argue for stricter controls to protect national security, others emphasize the humanitarian need to welcome refugees and provide a path to citizenship for undocumented immigrants.", label: "Left"},
+      {text: "Recent tax cuts have spurred economic growth, leading to record-low unemployment rates and a booming stock market. Critics argue that these tax cuts primarily benefit the wealthy, but supporters point to the overall positive impact on job creation and the economy as a whole. The current administration's pro-business policies have been credited with revitalizing industries and attracting investment, signaling a strong and resilient economy under conservative leadership.", label: "Right"},
+      {text: "Efforts to roll back regulations have been praised for freeing businesses from burdensome red tape and stimulating innovation. Critics, however, warn of potential environmental and safety risks associated with deregulation. The debate centers on finding a balance between economic freedom and regulatory oversight.", label: "Right"},
+      {text: "The Second Amendment guarantees the right to bear arms, a principle that many Americans hold dear. Advocates for gun rights argue that responsible gun ownership is a fundamental aspect of individual liberty and a crucial means of self-defense. They oppose efforts to restrict access to firearms, citing the need to protect this constitutional right.", label: "Right"},
+      {text: "Traditional values and family structures are under threat from cultural shifts and societal changes. Critics of progressive social movements argue that they undermine the foundations of society and erode moral standards. They advocate for preserving traditional family values and cultural norms.", label: "Right"},
+      {text: "National security is paramount in an increasingly complex and dangerous world. Strong borders and a robust military are essential for protecting the nation from external threats. Critics of isolationist policies argue that engagement with allies and a strong military presence are necessary to maintain peace and stability globally.", label: "Right"}
   
     ],
     inputs: [input]
@@ -188,6 +193,8 @@ router.post("/traits", async (req, res) => {
 
   console.log("toneLeft", toneLeft);
   rArray.push(toneLeft.classifications[0].labels.Left.confidence);
+
+
   const collection6 = db.collection('left');
   delete toneLeft.classifications[0].input;
   const leftInsert = await collection6.insertOne({ inputId, ...toneLeft.classifications[0], _id: toneLeft.id })
@@ -201,6 +208,7 @@ router.post("/traits", async (req, res) => {
   }
 
   console.log("summary", summary)
+  console.log("graaah", req.body.language);
 
   let actualSummary = summary.summary;
   if (req.body.language !== 'en' && actualSummary !== "Article too short to summarize") {
@@ -213,8 +221,15 @@ router.post("/traits", async (req, res) => {
   console.log("actual summary", actualSummary)
   rArray.push(actualSummary);
 
+  const sentenceSummary = await classifySummary(actualSummary);
+
+  rArray.push(sentenceSummary[0]);
+  rArray.push(sentenceSummary[1]);
+  rArray.push(sentenceSummary[2]);
+
+  const avgConfidence = (biasConfidence + polarizingConfidence + criticalConfidence + fakeConfidence) / 4.0;
   const collection8 = db.collection('input');
-  const inputInsert = await collection8.insertOne({ id: inputId, input, language: req.body.language, date: new Date() })
+  const inputInsert = await collection8.insertOne({ id: inputId, input, language: req.body.language, date: new Date(), avgConfidence })
 
 
   console.log("rArray", rArray)
@@ -222,6 +237,55 @@ router.post("/traits", async (req, res) => {
   res.send(rArray)
 });
 
+async function classifySummary(input) {
+  let sentences = input.split(".")
+  let leftSentences = []
+  let centerSentences = []
+  let rightSentences = []
+  for (let i = 0; i < sentences.length; i++) {
+    if (!sentences[i]) {
+      continue;
+    }
+
+    const leftLean = await cohere.classify({
+      examples: [
+        { text: 'Amidst growing concerns over income inequality, progressive lawmakers are pushing for legislation to raise the minimum wage to $15 per hour. Advocates argue that increasing the minimum wage will help lift millions of low-wage workers out of poverty and stimulate economic growth. They point to studies showing that higher wages lead to increased consumer spending, which benefits businesses and boosts the overall economy. However, opponents of the proposal, including many conservative lawmakers and business groups, argue that raising the minimum wage could lead to job losses and harm small businesses, particularly in rural areas where operating costs are already high. The debate over the minimum wage has become a central issue in the ongoing political discourse, with both sides fiercely advocating for their respective positions.', label: 'Left'},
+        { text: 'As the Biden administration continues to push for expansive government spending and regulatory measures, conservative lawmakers are sounding the alarm over the potential consequences for economic stability and individual freedoms. Critics argue that the proposed tax hikes and increased government intervention in the economy will stifle innovation, discourage investment, and ultimately harm job creation. They warn that excessive government spending will lead to inflation and burden future generations with unsustainable debt. Furthermore, conservatives express concerns about the erosion of personal liberty and the encroachment of government authority into various aspects of citizens\' lives. With ideological divides widening, the debate over the role of government and the direction of economic policy is intensifying, setting the stage for a contentious political battle in the months ahead.', label: 'Right'},
+        { text: '"In the wake of recent mass shootings, progressive activists are renewing calls for stricter gun control measures to address the epidemic of gun violence in the United States. Advocates argue that implementing universal background checks, banning assault weapons, and implementing red flag laws are essential steps to prevent future tragedies and protect public safety. They point to statistics showing that countries with stricter gun laws have lower rates of gun-related deaths and argue that the Second Amendment should not be a barrier to common-sense gun reform. However, opponents of gun control measures, including many conservative lawmakers and gun rights advocates, argue that such laws infringe on the constitutional rights of law-abiding citizens and do little to deter criminals. They emphasize the importance of enforcing existing laws and addressing mental health issues as alternative solutions to reducing gun violence.', label: 'Left'},
+        { text: 'As violent crime rates continue to rise in cities across the country, conservative leaders are calling for a return to tough-on-crime policies to restore law and order. Critics blame progressive policies such as defunding the police and lenient sentencing for contributing to the surge in crime, and argue that a more robust law enforcement presence is needed to combat criminal activity effectively. They advocate for policies such as increased funding for police departments, crackdowns on drug trafficking and gang violence, and stricter sentencing guidelines for repeat offenders. However, opponents of tough-on-crime measures, including many progressive activists and criminal justice reform advocates, argue that such policies disproportionately target communities of color and perpetuate systemic inequalities in the criminal justice system. They call for investments in community-based alternatives to incarceration and reforms to address root causes of crime, such as poverty and lack of access to education and economic opportunities.', label: 'Right'},
+        { text: 'In the face of mounting threats to reproductive rights, progressive activists are mobilizing to defend access to abortion and reproductive healthcare. With the Supreme Court poised to reconsider the landmark Roe v. Wade decision, which legalized abortion nationwide, advocates are sounding the alarm over the potential rollback of abortion rights and the erosion of women\'s autonomy over their own bodies. They argue that restricting access to abortion disproportionately harms marginalized communities, including low-income women and women of color, who already face barriers to healthcare access. Furthermore, advocates emphasize the importance of protecting abortion as a fundamental right and ensuring that all women have the ability to make decisions about their own bodies and futures. As states enact increasingly restrictive abortion laws, the battle over reproductive rights has become a central issue in the ongoing political discourse, with both sides fiercely advocating for their respective positions.', label: 'Left'},
+        { text: 'As the abortion debate intensifies across the nation, conservative lawmakers are advancing legislation to protect the sanctity of life and restrict access to abortion. With growing public support for pro-life policies, states are enacting measures to limit abortion, such as banning the procedure after a fetal heartbeat is detected or prohibiting certain abortion procedures later in pregnancy. Critics of abortion argue that the procedure is morally wrong and constitutes the taking of innocent human life. They emphasize the need to protect unborn children and provide support for pregnant women facing difficult circumstances. Furthermore, opponents of abortion rights highlight the potential physical and psychological risks associated with the procedure and argue that women deserve accurate information and compassionate alternatives to abortion. As the debate over abortion rights continues to divide the nation, the battle over the sanctity of life remains a deeply divisive and contentious issue in American politics.', label: 'Right'},
+        {text: "Despite claims of economic prosperity, many Americans continue to struggle with stagnant wages and rising living costs. Income inequality remains a pressing issue, with the wealthiest individuals and corporations benefiting disproportionately from recent tax policies. Critics argue that government intervention is necessary to address these disparities and ensure a more equitable distribution of wealth.", label: "Left"},
+        {text: "The ongoing debate over healthcare has highlighted the need for comprehensive reform. Advocates for universal healthcare argue that access to affordable medical services is a basic human right, while opponents fear increased government control and inefficiency. The current system, they argue, prioritizes profits over people's well-being.", label: "Left"},
+        {text: "As climate change accelerates, urgent action is needed to mitigate its impact. The scientific consensus is clear: human activities are driving global warming, leading to more frequent and severe weather events. Policies that prioritize renewable energy and sustainable practices are crucial to combating this existential threat.", label: "Left"},
+        {text: "The Black Lives Matter movement has brought renewed attention to systemic racism and police brutality in the United States. Calls for police reform and racial justice have grown louder, with many demanding accountability for law enforcement officers and a reimagining of public safety.", label: "Left"},
+        {text: "Immigration remains a divisive issue, with heated debates over border security and immigration policy. While some argue for stricter controls to protect national security, others emphasize the humanitarian need to welcome refugees and provide a path to citizenship for undocumented immigrants.", label: "Left"},
+        {text: "Recent tax cuts have spurred economic growth, leading to record-low unemployment rates and a booming stock market. Critics argue that these tax cuts primarily benefit the wealthy, but supporters point to the overall positive impact on job creation and the economy as a whole. The current administration's pro-business policies have been credited with revitalizing industries and attracting investment, signaling a strong and resilient economy under conservative leadership.", label: "Right"},
+        {text: "Efforts to roll back regulations have been praised for freeing businesses from burdensome red tape and stimulating innovation. Critics, however, warn of potential environmental and safety risks associated with deregulation. The debate centers on finding a balance between economic freedom and regulatory oversight.", label: "Right"},
+        {text: "The Second Amendment guarantees the right to bear arms, a principle that many Americans hold dear. Advocates for gun rights argue that responsible gun ownership is a fundamental aspect of individual liberty and a crucial means of self-defense. They oppose efforts to restrict access to firearms, citing the need to protect this constitutional right.", label: "Right"},
+        {text: "Traditional values and family structures are under threat from cultural shifts and societal changes. Critics of progressive social movements argue that they undermine the foundations of society and erode moral standards. They advocate for preserving traditional family values and cultural norms.", label: "Right"},
+        {text: "National security is paramount in an increasingly complex and dangerous world. Strong borders and a robust military are essential for protecting the nation from external threats. Critics of isolationist policies argue that engagement with allies and a strong military presence are necessary to maintain peace and stability globally.", label: "Right"}
+    
+      ],
+      inputs: [sentences[i]]
+    })
+
+    const leftPercent = leftLean.classifications[0].labels.Left.confidence;
+
+    if (leftPercent < 0.3333) {
+      rightSentences.push(sentences[i]);
+    } else if (leftPercent >= 0.3333 && leftPercent <= 0.6666) {
+      centerSentences.push(sentences[i]);
+    } else if (leftPercent > 0.6666) {
+      leftSentences.push(sentences[i]);
+    }
+  
+  
+
+  }
+  return [leftSentences, centerSentences, rightSentences];
+
+}
 
 async function summarizeText(input) {
   const summary = await cohere.summarize({
@@ -231,7 +295,4 @@ async function summarizeText(input) {
   return summary;
 }
 
-
 module.exports = router;
-
-
