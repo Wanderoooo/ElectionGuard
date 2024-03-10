@@ -37,12 +37,10 @@ function News() {
         // setNegativity(state.text);
         console.log(state);
         const input = {"input": state.text} 
-        axios.post(`http://localhost:${SERVERHOST}/classify/sentiment`, input)
+        axios.post(`http://localhost:${SERVERHOST}/classify/traits`, input)
         .then(response => {
   
           console.log('Success:', response.data);
-          let negativity = response.data.percentage * 100
-          setNegativity(negativity.toFixed(2));
         })
         .catch(error => {
           console.error('Error:', error);
