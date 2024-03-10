@@ -4,7 +4,7 @@ const router = express.Router();
 const csv = require('csv-parser');
 const fakedata = [];
 const realdata = [];
-
+const { v4: uuidv4 } = require('uuid');
 const authKey = "fa1181bd-8416-7024-11c9-11e04ee164a7:fx";
 const translator = new deepl.Translator(authKey);
 
@@ -32,9 +32,42 @@ fs.createReadStream('data/True.csv')
     // console.log(realdata);
   });
 
+const { MongoClient } = require('mongodb');
 
+let db = null;
+
+async function initializeDatabase() {
+    if (!db) {
+        const CONNECTION_STRING = "mongodb+srv://nwhacks:nwhacks2024@cluster0.r4ciglc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+        
+        try {
+            const client = await MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true });
+            db = client.db('electionguard'); // Use your database name here
+        } catch (error) {
+            console.error("Error connecting to MongoDB:", error);
+            throw error;
+        }
+    }
+    
+    return db;
+}
+
+// Example usage:
+async function main() {
+    try {
+        const database = await initializeDatabase();
+        console.log("Connected to MongoDB:", database.databaseName);
+        // Perform operations with the database
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+}
+
+main();
 
 router.post("/traits", async (req, res) => {
+
+    const inputId = uuidv4();
     let input = req.body.input;
     if (req.body.language !== 'en') {
       const inputText = await translator.translateText(input, null, 'en-US');
@@ -61,6 +94,9 @@ router.post("/traits", async (req, res) => {
 
       console.log("tonePositive: ", tonePositive);
       rArray.push(tonePositive.classifications[0].labels.Negative.confidence)
+      const collection = db.collection('positive');
+      delete tonePositive.classifications[0].input;
+      const posInsert = await collection.insertOne({ inputId, ...tonePositive.classifications[0], _id: tonePositive.id })
 
       const tonePolarizing = await cohere.classify({
         examples: [
@@ -76,6 +112,9 @@ router.post("/traits", async (req, res) => {
     
       console.log("tonePolarizing: ", tonePolarizing);
       rArray.push(tonePolarizing.classifications[0].labels.Polarizing.confidence)
+      const collection2 = db.collection('polarizing');
+      delete tonePolarizing.classifications[0].input;
+      const polarInsert = await collection2.insertOne({ inputId, ...tonePolarizing.classifications[0], _id: tonePolarizing.id })
 
       const toneBiased = await cohere.classify({
         examples: [
@@ -90,6 +129,9 @@ router.post("/traits", async (req, res) => {
 
   console.log("toneBiased: ", toneBiased);
   rArray.push(toneBiased.classifications[0].labels.Biased.confidence)
+  const collection3 = db.collection('bias');
+  delete toneBiased.classifications[0].input;
+  const biasInsert = await collection3.insertOne({ inputId, ...toneBiased.classifications[0], _id: toneBiased.id })
 
   const toneCritical = await cohere.classify({
     examples: [
@@ -104,6 +146,9 @@ router.post("/traits", async (req, res) => {
 
   console.log("toneCritical", toneCritical);
   rArray.push(toneCritical.classifications[0].labels.Critical.confidence)
+  const collection4 = db.collection('critical');
+  delete tonePositive.classifications[0].input;
+  const toneInsert = await collection4.insertOne({ inputId, ...toneCritical.classifications[0], _id: toneCritical.id })
   
   const toneFake = await cohere.classify({
     examples: [...fakedata.slice(0,20), ...realdata.slice(0,20)],
@@ -114,6 +159,9 @@ router.post("/traits", async (req, res) => {
   
   console.log("toneFake", toneFake);
   rArray.push(toneFake.classifications[0].labels.fake.confidence)
+  const collection5 = db.collection('truthness');
+  delete toneFake.classifications[0].input;
+  const truthInsert = await collection5.insertOne({ inputId, ...toneFake.classifications[0], _id: toneFake.id })
   
   const toneLeft = await cohere.classify({
     examples: [
@@ -140,6 +188,9 @@ router.post("/traits", async (req, res) => {
 
   console.log("toneLeft", toneLeft);
   rArray.push(toneLeft.classifications[0].labels.Left.confidence);
+  const collection6 = db.collection('left');
+  delete toneLeft.classifications[0].input;
+  const leftInsert = await collection6.insertOne({ inputId, ...toneLeft.classifications[0], _id: toneLeft.id })
 
   let summary = {};
   try {
@@ -149,13 +200,22 @@ router.post("/traits", async (req, res) => {
     // silent fail if input < 250 characters
   }
 
+  console.log("summary", summary)
+
   let actualSummary = summary.summary;
   if (req.body.language !== 'en' && actualSummary !== "Article too short to summarize") {
     const summaryText = await translator.translateText(actualSummary, null, req.body.language);
     actualSummary = summaryText.text;
+    const collection7 = db.collection('summary');
+    const summaryInsert = await collection7.insertOne({ inputId, summary: actualSummary, _id: summary.id })
   }
+
   console.log("actual summary", actualSummary)
   rArray.push(actualSummary);
+
+  const collection8 = db.collection('input');
+  const inputInsert = await collection8.insertOne({ id: inputId, input, language: req.body.language, date: new Date() })
+
 
   console.log("rArray", rArray)
 
@@ -170,6 +230,8 @@ async function summarizeText(input) {
   console.log(summary);
   return summary;
 }
+
+
 module.exports = router;
 
 
