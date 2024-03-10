@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+<<<<<<< HEAD
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+=======
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+>>>>>>> 9e908dc26715cfe67e405a447989d2913ff40fc2
 import News from './News'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
