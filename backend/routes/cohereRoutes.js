@@ -1,8 +1,12 @@
+const deepl = require('deepl-node');
 const express = require("express");
 const router = express.Router();
 const csv = require('csv-parser');
 const fakedata = [];
 const realdata = [];
+
+const authKey = "fa1181bd-8416-7024-11c9-11e04ee164a7:fx";
+const translator = new deepl.Translator(authKey);
 
 const { CohereClient } = require("cohere-ai");
 
@@ -43,7 +47,11 @@ router.post("/sentiment", async (req, res) => {
   });
 
 router.post("/traits", async (req, res) => {
-    const input = req.body.input;
+    let input = req.body.input;
+    if (req.body.language !== 'en') {
+      const inputText = await translator.translateText(input, null, 'en-US');
+      input = inputText.text;
+    }
     console.log("input", req)
     const rArray = [];
     const tonePositive = await cohere.classify({
