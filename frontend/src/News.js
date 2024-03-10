@@ -8,6 +8,8 @@ import "./News.css";
 import axios from 'axios';
 import logo from "./Copy of NEWS.png"
 import logo2 from "./Copy of NEWS (1).gif";
+import Icon from '@ant-design/icons';
+import {InfoCircleFilled} from '@ant-design/icons';
 
 const { Title, Te } = Typography;
 const SERVERHOST = 3001;
@@ -36,7 +38,7 @@ function News() {
     const [c, setc] = useState("CRITICALITY");
     const [lr, setlr] = useState("LEFT/RIGHT LEANING");
 
-    const [tab, setTab] = useState([[["left"], ["content"]], [["center"], ["content"]], [["right"], ["content"]]]);
+    const [tab, setTab] = useState([[["LEFT"], ["content"], [<InfoCircleFilled style={{color: 'blue' }}/>]], [["CENTER"], ["content"], [<InfoCircleFilled />]], [["RIGHT"], ["content"], [<InfoCircleFilled style={{color: 'red' }} />]]]);
 
     const [loadings, setLoadings] = useState([]);
 
@@ -44,7 +46,7 @@ function News() {
     const navigate = useNavigate();
 
     const handleChange = (value) => {
-        setLang(value )
+        setLang(value)
         if (value == "en") {
             setAnalyzer("ANALYZE");
             setmm("Menu");
@@ -151,7 +153,7 @@ function News() {
                 <div className="demo-logo" />
                 <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
                     onMouseOut={e => (e.currentTarget.src = logo)} />
-                <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
+                <Title style={{ color: 'white', fontFamily:'Cinzel' , fontWeight: 500} }>ELECTION GUARD</Title>
 
                 <Menu onClick={mm} theme="dark"
                     mode="horizontal"
@@ -328,18 +330,32 @@ function News() {
                                 alignItems: 'center',
                                 color: 'black',
                             }}>
-                                <Tabs
-                                centered
+                                <ConfigProvider
+                                    theme={{
+                                        components: {
+                                            Tabs: {
+                                                itemColor: 'grey',
+                                                itemSelectedColor: 'black',
+                                                inkBarColor: 'blue',
+                                            },
+                                        },
+                                    }}
+                                >
+                                    <Tabs
+                                    centered
                                     type="card"
                                     items={new Array(3).fill(null).map((_, i) => {
                                         const id = String(i);
                                         return {
                                             label: tab[id][0],
                                             key: id,
-                                            children: tab[id],
+                                            children: tab[id][1],
+                                            icon: tab[id][2],
                                         };
                                     })}
                                 />
+                                </ConfigProvider>
+                                
                             </div>
                         </Flex>
 
