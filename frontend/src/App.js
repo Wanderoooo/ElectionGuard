@@ -3,7 +3,8 @@ import './index.css';
 import { Flex, Button, Image, Breadcrumb, Layout, Menu, theme, Typography } from 'antd';
 import { FlexProps, SegmentedProps } from 'antd';
 
-import logo from './2.png';
+import logo from './Copy of NEWS.png';
+import logo2 from './Copy of NEWS (1).gif';
 import bgPic from './Newspapers_Getty.jpg'
 import { useNavigate } from "react-router-dom";
 
@@ -35,7 +36,12 @@ function App() {
         navigate("/news");
     }
 
+    function ll(e) {
+      console.log("hello");
+      navigate("/");
+    }
 
+    
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -44,17 +50,18 @@ function App() {
     <Layout>
       <Header
         style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 1,
-          width: '100%',
+          padding: '50px 50px',
           display: 'flex',
           alignItems: 'center',
+          color: 'white',
         }}
       >
-        <img src={logo} width={50}/>
+        
 
-        <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
+        <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
+                onMouseOut={e => (e.currentTarget.src = logo)} onClick={ll} />
+
+        <Title style={{ color: 'white', onClick:{ll}} }>ELECTION GUARD  </Title>
 
         
       </Header>
