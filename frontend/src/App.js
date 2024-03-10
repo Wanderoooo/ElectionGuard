@@ -133,15 +133,15 @@ function App() {
           <Flex style={boxStyle} justify={'baseline'} vertical={true}>
 
           {/* <img className='bgImg' src={bgPic} /> */}
-          <img src={newscomp} style={{height: '400px', width: '400px', marginLeft: '800px'}} />
           <div style={{marginLeft: '190px'}}>
           <h1 style={{color: '#00008B', fontSize: '50px'}}> {title}</h1>
           <h5 style={{color: '#00008B', fontSize: '20px', width: '1000px'}}>
             {descr}
           </h5>
+          <img src={newscomp} style={{height: '400px', width: '450px', marginLeft: '1000'}} />
           </div>
           <div>
-            <img src={gifImage} style={{height: '400px', width: '500px'}} />
+            {/* <img src={gifImage} style={{height: '400px', width: '500px'}} /> */}
           </div>
           </Flex>
           

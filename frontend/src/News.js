@@ -214,7 +214,7 @@ function News() {
                         <br />
                         <div>
                             <ConfigProvider contentFontSizeLG={20}>
-                                <Button style={{ padding: "0px 20px" }} size="large" type="primary" loading={loadings[0]}
+                                <Button style={{ padding: "0px 20px", backgroundColor: '#00008B' }} size="large" type="primary" loading={loadings[0]}
                                     onClick={analyze} >{analyzer}</Button>
                             </ConfigProvider>
                         </div>
