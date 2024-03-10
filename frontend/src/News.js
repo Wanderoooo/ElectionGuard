@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import ProgressLine from "./ProgressLine";
 import "./News.css";
 //import axios from 'axios';
-import logo from "./2.png"
+import logo from "./Copy of NEWS.png"
+import logo2 from "./Copy of NEWS (1).gif";
 
 const { Title, Te } = Typography;
 const SERVERHOST = 3001;
@@ -70,7 +71,8 @@ function News() {
                 }}
             >
                 <div className="demo-logo" />
-                <img src={logo} className='bgImg' width={colorBgContainer - 10} height={50} />
+                <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
+                onMouseOut={e => (e.currentTarget.src = logo)}/>
                 <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
 
                 <Menu onClick={mm} theme="dark"
