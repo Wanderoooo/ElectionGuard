@@ -24,12 +24,13 @@ function News() {
     const [criticality, setCriticality] = useState(-1);
     const [status, setStatus] = useState("exception");
     const [lang, setLang] = useState("en");
+    const [summary, setSummary] = useState("summarizing!");
 
     const [state, setState] = useState(0);
     const navigate = useNavigate();
 
     const handleChange = (value) => {
-        setLang({value})
+        setLang({ value })
     };
 
     function mm(e) {
@@ -42,6 +43,7 @@ function News() {
         setPolarizing(state.text);
         setBias(state.text);
         setCriticality(state.text);
+
         // setNegativity(state.text);
         // console.log(state);
         // const input = {"input": state.text} 
@@ -72,7 +74,7 @@ function News() {
             >
                 <div className="demo-logo" />
                 <img src={logo} className='bgImg' width={colorBgContainer} height={70} onMouseOver={e => (e.currentTarget.src = logo2)}
-                onMouseOut={e => (e.currentTarget.src = logo)}/>
+                    onMouseOut={e => (e.currentTarget.src = logo)} />
                 <Title style={{ color: 'white' }}>ELECTION GUARD</Title>
 
                 <Menu onClick={mm} theme="dark"
@@ -113,16 +115,16 @@ function News() {
                         <div>
                             <Select
                                 defaultValue="English"
-                                style={{ width: 120, paddingRight:10}}
+                                style={{ width: 120, paddingRight: 10 }}
                                 onChange={handleChange}
                                 options={[
                                     { value: 'en', label: 'English' },
                                     { value: 'fr', label: 'French' },
-                                    { value: 'sp', label: 'Spanish' },
+                                    { value: 'es', label: 'Spanish' },
                                 ]}
                             />
                             <ConfigProvider contentFontSizeLG={20}>
-                                <Button style={{ padding: "0px 20px"}} size="large" type="primary" onClick={analyze} >ANALYZE</Button>
+                                <Button style={{ padding: "0px 20px" }} size="large" type="primary" onClick={analyze} >ANALYZE</Button>
                             </ConfigProvider>
                         </div>
 
@@ -130,73 +132,103 @@ function News() {
 
                     <Content
                         style={{
-                            display: 'flex',
-                            padding: '100px 100px',
+                            padding: '20px 20px',
                             background: colorBgContainer,
                             textAlign: 'center',
-                            alignItems: 'vertical',
                             color: 'black',
+                            alignItems: 'center',
                         }}
                         width={200}
                     >
-                        <div style={{
-                            padding: '100px 25px',
+                        <Flex vertical={true} style={{
+                            padding: '20px 20px',
                             background: colorBgContainer,
                             textAlign: 'center',
                             alignItems: 'center',
                             color: 'black',
                         }}>
                             <h2>ANALYSIS OF YOUR NEWS ARTICLE</h2>
+
+                            <Flex vertical={false} style={{
+                                textJustify: 'center',
+                                alignItems: 'center',
+                                textAlign: 'center',
+
+                            }}>
+                                <Flex vertical={true} gap="small" wrap="wrap" style={{
+                                    padding: '20px 20px',
+                                    background: colorBgContainer,
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    color: 'black',
+                                }}>
+                                    <Progress type="circle" percent={negativity} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
+                                    <h3>NEGATIVITY</h3>
+                                </Flex>
+
+                                <Flex vertical={true} gap="small" wrap="wrap" style={{
+                                    padding: '20px 20px',
+                                    background: colorBgContainer,
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    color: 'black',
+                                }}>
+                                    <Progress type="circle" percent={polarizing} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
+                                    <h3>POLARIZING</h3>
+                                </Flex>
+
+                                <Flex vertical={true} gap="small" wrap="wrap" style={{
+                                    padding: '20px 20px',
+                                    background: colorBgContainer,
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    color: 'black',
+                                }}>
+                                    <Progress type="circle" percent={bias} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
+                                    <h3>BIAS</h3>
+                                </Flex>
+
+                                <Flex vertical={true} gap="small" wrap="wrap" style={{
+                                    padding: '20px 20px',
+                                    background: colorBgContainer,
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    color: 'black',
+                                }}>
+                                    <Progress type="circle" percent={criticality} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
+                                    <h3>CRITICALITY</h3>
+                                </Flex>
+                            </Flex>
+                        </Flex>
+
+                    </Content>
+
+                    <Content style={{
+                        padding: '20px 100px',
+                        background: colorBgContainer,
+                        textAlign: 'center',
+                        alignItems: 'center',
+                        color: 'black',
+                    }}>
+                        <div style={{
+                            padding: '25px 25px',
+                            background: colorBgContainer,
+                            textAlign: 'center',
+                            alignItems: 'center',
+                            color: 'black',
+                        }}>
+                            <h2>ARTICLE SUMMARY</h2>
                         </div>
-                        <div>
-                            <Flex gap="small" wrap="wrap" style={{
-                                padding: '20px 20px',
-                                background: colorBgContainer,
-                                textAlign: 'center',
-                                alignItems: 'center',
-                                color: 'black',
-                            }}>
-                                <Progress type="circle" percent={negativity} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
-                                <h3>NEGATIVITY</h3>
-                            </Flex>
 
-                            <Flex gap="small" wrap="wrap" style={{
-                                padding: '20px 20px',
-                                background: colorBgContainer,
-                                textAlign: 'center',
-                                alignItems: 'center',
-                                color: 'black',
-                            }}>
-                                <Progress type="circle" percent={polarizing} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
-                                <h3>POLARIZING</h3>
-                            </Flex>
+                        <div style={{
+                            padding: '25px 25px',
+                            background: colorBgContainer,
+                            textAlign: 'center',
+                            alignItems: 'center',
+                            color: 'black',
+                        }}>
+                            <h3>SUMMARY OF YOUR ARTICLE</h3>
                         </div>
-
-                        <div>
-                            <Flex gap="small" wrap="wrap" style={{
-                                padding: '20px 20px',
-                                background: colorBgContainer,
-                                textAlign: 'center',
-                                alignItems: 'center',
-                                color: 'black',
-                            }}>
-                                <Progress type="circle" percent={bias} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
-                                <h3>BIAS</h3>
-                            </Flex>
-
-                            <Flex gap="small" wrap="wrap" style={{
-                                padding: '20px 20px',
-                                background: colorBgContainer,
-                                textAlign: 'center',
-                                alignItems: 'center',
-                                color: 'black',
-                            }}>
-                                <Progress type="circle" percent={criticality} strokeColor="red" success={{ percent: 0, strokeColor: "red" }} status={status} />
-                                <h3>CRITICALITY</h3>
-                            </Flex>
-                        </div>
-
-
                     </Content>
                 </Layout>
             </Content>
